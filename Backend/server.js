@@ -7,8 +7,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/whoami", (req, res) => {
+  res.json({ server: "banana-quiz-backend", time: new Date().toISOString() });
+});
+
+//Auth  routes
 const authRoutes = require("./routes/authRoutes");
 app.use("/auth", authRoutes);
+
+// 🔹 Import middleware
+const authMiddleware = require("./middleware/authMiddleware");
+
+// 🔹 Protected route 
+app.get("/protected", authMiddleware, (req, res) => {
+  res.json({
+    message: "Access granted",
+    user: req.user
+  });
+});
 
 // MongoDB connect
 mongoose
