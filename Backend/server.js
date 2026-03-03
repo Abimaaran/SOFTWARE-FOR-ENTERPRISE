@@ -7,9 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/whoami", (req, res) => {
-  res.json({ server: "banana-quiz-backend", time: new Date().toISOString() });
-});
+
 
 //Auth  routes
 const authRoutes = require("./routes/authRoutes");
