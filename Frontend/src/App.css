@@ -1,49 +1,169 @@
+/* ===== Global ===== */
+:root {
+  --bg: #f5f7fa;
+  --text: #222;
+  --card: #ffffff;
+  --border: #d7d7d7;
+  --shadow: 0 6px 22px rgba(0, 0, 0, 0.10);
+
+  --green: #4CAF50;
+  --greenHover: #45a049;
+
+  --pinkBg: #ffb8b8;
+  --pinkBorder: #f19999;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f5f7fa;
-
-  /* center everything */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  background: var(--bg);
+  color: var(--text);
 }
 
-/* main box */
+/* ===== Auth Layout (Login/Register) ===== */
 .app-container {
-  width: 400px;
-  background: white;
+  width: 420px;
+  margin: 80px auto;
+  background: var(--card);
   padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
 }
 
-/* title */
+/* Title */
 h1 {
   text-align: center;
-  color: #222;
+  margin: 0 0 18px;
+  color: var(--text);
 }
 
-/* inputs */
+h2 {
+  margin: 18px 0 10px;
+  color: #333;
+}
+
+/* Inputs */
 input {
   width: 100%;
-  padding: 10px;
+  padding: 10px 12px;
   margin: 8px 0;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  border-radius: 8px;
+  border: 1px solid #cfcfcf;
+  font-size: 14px;
+  outline: none;
 }
 
-/* buttons */
+input:focus {
+  border-color: #9fb7ff;
+}
+
+/* Buttons */
 button {
   width: 100%;
   padding: 12px;
-  background: #4CAF50;
+  background: var(--green);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 button:hover {
-  background: #45a049;
+  background: var(--greenHover);
+}
+
+p {
+  margin: 10px 0 8px;
+}
+
+hr {
+  margin: 22px 0;
+  border: none;
+  border-top: 1px solid #e6e6e6;
+}
+
+/* ===== Game Page Styles ===== */
+/* Put this class on Game page wrapper: <div className="game-wrap"> */
+.game-wrap {
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 10px;
+}
+
+/* Big heading like screenshot */
+.game-title {
+  font-size: 54px;
+  font-weight: 800;
+  margin: 10px 0 20px;
+}
+
+/* White board for puzzle image */
+.game-board {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+/* Image sizing */
+.banana-img {
+  width: 100%;
+  max-width: 1000px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Status text */
+.game-status {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 20px 0;
+}
+
+/* Score / Lives */
+.game-hud {
+  display: flex;
+  gap: 24px;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* Answer area row */
+.answer-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.answer-label {
+  font-size: 30px;
+  font-weight: 800;
+}
+
+/* Pink input like screenshot */
+.answer-input {
+  width: 140px;
+  height: 55px;
+  font-size: 28px;
+  padding: 0 12px;
+  border-radius: 14px;
+  border: 2px solid var(--pinkBorder);
+  background: var(--pinkBg);
+}
+
+/* Game submit button */
+.game-btn {
+  width: auto;           /* not full width */
+  height: 55px;
+  padding: 0 18px;
+  border-radius: 12px;
+  font-size: 18px;
 }

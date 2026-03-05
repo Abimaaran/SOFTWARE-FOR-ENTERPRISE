@@ -7,6 +7,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Banana quiz routes
+const bananaRoutes = require("./routes/bananaRoutes");
+app.use("/banana", bananaRoutes);
+
 
 
 //Auth  routes
