@@ -229,16 +229,40 @@ body {
   font-size: 18px;
 }
 
-.game-hud span:last-child {
+.game-hud span:nth-child(2) {
   color: #C62828;
   border: 2px solid #FFD700;
   background: linear-gradient(145deg, #FFFFFF, #FFF9E6);
 }
 
-.game-hud span:last-child::before {
+.game-hud span:nth-child(2)::before {
   content: '❤️';
   margin-right: 6px;
   font-size: 18px;
+}
+
+.game-hud span:nth-child(3) {
+  color: #1976D2;
+  border: 2px solid #FFD700;
+  background: linear-gradient(145deg, #FFFFFF, #FFF9E6);
+}
+
+.game-hud span:nth-child(3)::before {
+  content: '⏰';
+  margin-right: 6px;
+  font-size: 18px;
+}
+
+.game-hud span.timer-warning {
+  color: #D32F2F;
+  border-color: #F44336;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 
 /* ===== Answer Section - More Compact ===== */

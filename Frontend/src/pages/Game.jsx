@@ -4,16 +4,19 @@ import "./Game.css";
 
 function Game() {
   const [imgUrl, setImgUrl] = useState("");
-  const [solution, setSolution] = useState(null); // Day 6: ok to keep in frontend
+  const [solution, setSolution] = useState(null);
   const [answer, setAnswer] = useState("");
   const [msg, setMsg] = useState("Quest is ready.");
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
+  const [timeLeft, setTimeLeft] = useState(15);
 
   const loadQuestion = async () => {
     try {
       setMsg("Loading...");
       setAnswer("");
+      setTimeLeft(60);
+
       const res = await axios.get("http://localhost:5000/banana/question");
       setImgUrl(res.data.question);
       setSolution(res.data.solution);
@@ -27,6 +30,23 @@ function Game() {
     loadQuestion();
   }, []);
 
+  useEffect(() => {
+    if (lives <= 0) return;
+
+    if (timeLeft === 0) {
+      setLives((prev) => prev - 1);
+      setMsg("⏰ Time up! Loading next...");
+      loadQuestion();
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [timeLeft, lives]);
+
   const submit = () => {
     if (lives <= 0) return;
     if (answer.trim() === "") return;
@@ -34,11 +54,11 @@ function Game() {
     const userAns = Number(answer);
 
     if (userAns === solution) {
-      setScore((s) => s + 10);
+      setScore((prev) => prev + 10);
       setMsg("✅ Correct! Loading next...");
       loadQuestion();
     } else {
-      setLives((l) => l - 1);
+      setLives((prev) => prev - 1);
       setMsg("❌ Wrong! Loading next...");
       loadQuestion();
     }
@@ -47,6 +67,7 @@ function Game() {
   const restart = () => {
     setScore(0);
     setLives(3);
+    setTimeLeft(60);
     setMsg("Quest is ready.");
     loadQuestion();
   };
@@ -54,7 +75,6 @@ function Game() {
   return (
     <div className="page">
       <div className="game-wrap">
-        
         <h1 className="game-title">The Banana Game</h1>
 
         <div className="game-board">
@@ -70,11 +90,13 @@ function Game() {
         <div className="game-hud">
           <span>Score: {score}</span>
           <span>Lives: {lives}</span>
+          <span className={timeLeft <= 10 ? 'timer-warning' : ''}>Time: {timeLeft}s</span>
         </div>
 
         {lives <= 0 ? (
           <div>
-            <h2>Game Over 😢</h2>
+            <h2 className="game-over">Game Over 😢</h2>
+            <p className="game-status">Final Score: {score}</p>
             <button className="game-btn" onClick={restart}>
               Restart
             </button>
