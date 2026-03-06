@@ -1,169 +1,130 @@
-/* ===== Global ===== */
-:root {
-  --bg: #f5f7fa;
-  --text: #222;
-  --card: #ffffff;
-  --border: #d7d7d7;
-  --shadow: 0 6px 22px rgba(0, 0, 0, 0.10);
+/* ===== App.css - Only App Container Styles ===== */
 
-  --green: #4CAF50;
-  --greenHover: #45a049;
-
-  --pinkBg: #ffb8b8;
-  --pinkBorder: #f19999;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-}
-
-/* ===== Auth Layout (Login/Register) ===== */
 .app-container {
-  width: 420px;
-  margin: 80px auto;
-  background: var(--card);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-}
-
-/* Title */
-h1 {
-  text-align: center;
-  margin: 0 0 18px;
-  color: var(--text);
-}
-
-h2 {
-  margin: 18px 0 10px;
-  color: #333;
-}
-
-/* Inputs */
-input {
   width: 100%;
-  padding: 10px 12px;
-  margin: 8px 0;
-  border-radius: 8px;
-  border: 1px solid #cfcfcf;
-  font-size: 14px;
-  outline: none;
-}
-
-input:focus {
-  border-color: #9fb7ff;
-}
-
-/* Buttons */
-button {
-  width: 100%;
-  padding: 12px;
-  background: var(--green);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-button:hover {
-  background: var(--greenHover);
-}
-
-p {
-  margin: 10px 0 8px;
-}
-
-hr {
-  margin: 22px 0;
-  border: none;
-  border-top: 1px solid #e6e6e6;
-}
-
-/* ===== Game Page Styles ===== */
-/* Put this class on Game page wrapper: <div className="game-wrap"> */
-.game-wrap {
-  max-width: 1100px;
-  margin: 20px auto;
-  padding: 10px;
-}
-
-/* Big heading like screenshot */
-.game-title {
-  font-size: 54px;
-  font-weight: 800;
-  margin: 10px 0 20px;
-}
-
-/* White board for puzzle image */
-.game-board {
-  background: var(--card);
-  border: 1px solid var(--border);
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-}
-
-/* Image sizing */
-.banana-img {
-  width: 100%;
-  max-width: 1000px;
-  display: block;
-  margin: 0 auto;
-}
-
-/* Status text */
-.game-status {
-  font-size: 28px;
-  font-weight: 700;
-  margin: 20px 0;
-}
-
-/* Score / Lives */
-.game-hud {
+  height: 100vh;
   display: flex;
-  gap: 24px;
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 16px;
+  flex-direction: column;
+  position: relative;
+  isolation: isolate;
 }
 
-/* Answer area row */
-.answer-area {
+.page-content {
+  flex: 1;
+  position: relative;
+}
+
+/* App Title - Fixed at Top */
+.app-title {
+  font-size: 42px;
+  font-weight: 800;
+  color: white;
+  text-align: center;
+  padding: 20px 0 10px;
+  margin: 0;
+  text-shadow: 2px 2px 0 #8B4513;
+  letter-spacing: 1px;
+  z-index: 100;
+  flex-shrink: 0;
+  background: transparent;
+  pointer-events: none;
+  animation: titleFloat 3s ease-in-out infinite;
+}
+
+@keyframes titleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.app-title::before {
+  content: '🍌';
+  margin-right: 10px;
+  font-size: 42px;
+  display: inline-block;
+  animation: rotateLeft 3s infinite;
+}
+
+.app-title::after {
+  content: '🍌';
+  margin-left: 10px;
+  font-size: 42px;
+  display: inline-block;
+  animation: rotateRight 3s infinite;
+}
+
+@keyframes rotateLeft {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+@keyframes rotateRight {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(10deg); }
+  75% { transform: rotate(-10deg); }
+}
+
+/* Routes Container - Content Area */
+.routes-container {
+  flex: 1;
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
 }
 
-.answer-label {
-  font-size: 30px;
-  font-weight: 800;
+/* Page Transition Wrapper */
+.page-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pageFadeIn 0.3s ease-out;
 }
 
-/* Pink input like screenshot */
-.answer-input {
-  width: 140px;
-  height: 55px;
-  font-size: 28px;
-  padding: 0 12px;
-  border-radius: 14px;
-  border: 2px solid var(--pinkBorder);
-  background: var(--pinkBg);
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-/* Game submit button */
-.game-btn {
-  width: auto;           /* not full width */
-  height: 55px;
-  padding: 0 18px;
-  border-radius: 12px;
-  font-size: 18px;
+/* Responsive */
+@media (max-width: 768px) {
+  .app-title {
+    font-size: 32px;
+    padding: 15px 0 5px;
+  }
+  
+  .app-title::before,
+  .app-title::after {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-title {
+    font-size: 26px;
+    padding: 12px 0 5px;
+  }
+  
+  .app-title::before,
+  .app-title::after {
+    font-size: 26px;
+  }
+}
+
+@media (max-height: 600px) and (orientation: landscape) {
+  .app-title {
+    font-size: 28px;
+    padding: 10px 0 5px;
+  }
 }

@@ -1,0 +1,711 @@
+/* ===== Game.css - Yellow Theme Banana Quiz with Larger Image ===== */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+/* ===== Base Styles - Full Screen ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden; /* Prevents scrolling */
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+}
+
+.page {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+}
+
+/* ===== Game Container - Full Height ===== */
+.game-wrap {
+  width: 95vw;
+  max-width: 1400px;
+  height: 90vh; /* Increased from 85vh for more space */
+  margin: 0 auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 40px;
+  box-shadow: 0 30px 60px -15px rgba(255, 140, 0, 0.4);
+  animation: slideUp 0.6s ease-out;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 3px solid #FFD700;
+  position: relative;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Title - Smaller to give more space for image ===== */
+.game-title {
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #8B4513;
+  text-align: center;
+  position: relative;
+  padding-bottom: 10px;
+  flex-shrink: 0;
+  text-shadow: 2px 2px 0 #FFD700;
+  letter-spacing: 1px;
+}
+
+.game-title span {
+  display: inline-block;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.game-title::before {
+  content: '🍌';
+  font-size: 45px;
+  margin-right: 10px;
+  display: inline-block;
+  animation: rotate 3s infinite;
+}
+
+.game-title::after {
+  content: '🍌';
+  font-size: 45px;
+  margin-left: 10px;
+  display: inline-block;
+  animation: rotate 3s infinite reverse;
+}
+
+@keyframes rotate {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-15deg); }
+  75% { transform: rotate(15deg); }
+}
+
+/* ===== Puzzle Board - Larger area for image ===== */
+.game-board {
+  background: linear-gradient(145deg, #FFF9E6, #FFF0C0);
+  border: 3px solid #FFD700;
+  padding: 20px;
+  border-radius: 30px;
+  box-shadow: 
+    inset 0 2px 10px rgba(255, 215, 0, 0.3),
+    0 20px 30px -10px rgba(255, 140, 0, 0.3);
+  flex: 5; /* Slightly increased for bigger image */
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.game-board:hover {
+  transform: scale(1.01);
+  box-shadow: 
+    inset 0 2px 15px rgba(255, 215, 0, 0.4),
+    0 25px 35px -10px rgba(255, 140, 0, 0.4);
+}
+
+/* Banana puzzle image - MUCH LARGER NOW */
+.banana-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  border-radius: 20px;
+  filter: drop-shadow(0 15px 20px rgba(255, 140, 0, 0.3));
+  transition: all 0.3s ease;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.banana-img:hover {
+  filter: drop-shadow(0 20px 25px rgba(255, 140, 0, 0.4));
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Loading state */
+.game-board p {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 28px;
+  color: #8B4513;
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFF0C0 100%);
+  border-radius: 20px;
+  width: 100%;
+  border: 2px dashed #FFD700;
+}
+
+/* ===== Status Message - More Compact ===== */
+.game-status {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 6px 0;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #8B4513;
+  border-radius: 50px;
+  text-align: center;
+  box-shadow: 0 10px 15px -5px rgba(255, 140, 0, 0.4);
+  animation: yellowPulse 2s infinite;
+  flex-shrink: 0;
+  border: 2px solid white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@keyframes yellowPulse {
+  0%, 100% {
+    box-shadow: 0 10px 15px -5px rgba(255, 140, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 15px 20px -5px rgba(255, 140, 0, 0.6);
+  }
+}
+
+/* ===== Score & Lives - More Compact ===== */
+.game-hud {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(145deg, #FFF9E6, #FFF0C0);
+  border-radius: 50px;
+  box-shadow: 0 10px 20px -5px rgba(255, 140, 0, 0.2);
+  flex-shrink: 0;
+  border: 2px solid #FFD700;
+}
+
+.game-hud span {
+  padding: 8px 30px;
+  border-radius: 40px;
+  background: white;
+  box-shadow: 0 5px 10px -3px rgba(255, 140, 0, 0.2);
+  position: relative;
+}
+
+.game-hud span:first-child {
+  color: #2E7D32;
+  border: 2px solid #FFD700;
+  background: linear-gradient(145deg, #FFFFFF, #FFF9E6);
+}
+
+.game-hud span:first-child::before {
+  content: '⭐';
+  margin-right: 6px;
+  font-size: 18px;
+}
+
+.game-hud span:last-child {
+  color: #C62828;
+  border: 2px solid #FFD700;
+  background: linear-gradient(145deg, #FFFFFF, #FFF9E6);
+}
+
+.game-hud span:last-child::before {
+  content: '❤️';
+  margin-right: 6px;
+  font-size: 18px;
+}
+
+/* ===== Answer Section - More Compact ===== */
+.answer-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(145deg, #FFF9E6, #FFF0C0);
+  border-radius: 60px;
+  flex-shrink: 0;
+  border: 2px solid #FFD700;
+}
+
+/* Label */
+.answer-label {
+  font-size: 20px;
+  font-weight: 700;
+  color: #8B4513;
+  position: relative;
+}
+
+.answer-label::before {
+  content: '🍌';
+  margin-right: 10px;
+  font-size: 1.2em;
+  animation: bounce 2s infinite;
+}
+
+/* Input box */
+.answer-input {
+  width: 70px;
+  height: 50px;
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+  padding: 5px;
+  border-radius: 20px;
+  border: 3px solid #FFD700;
+  background: white;
+  color: #8B4513;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 10px -3px rgba(255, 140, 0, 0.3);
+}
+
+.answer-input:focus {
+  border-color: #FFA500;
+  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.3);
+  transform: scale(1.05);
+  background: #FFF9E6;
+}
+
+.answer-input::placeholder {
+  color: #FFD700;
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+/* Submit button */
+.game-btn {
+  height: 45px;
+  padding: 0 25px;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 35px;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #8B4513;
+  border: 2px solid white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 15px -5px rgba(255, 140, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+  width: 120px;
+}
+
+.game-btn::before {
+  content: '🍌';
+  position: absolute;
+  left: -30px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.game-btn::after {
+  content: '🍌';
+  position: absolute;
+  right: -30px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.game-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 20px -5px rgba(255, 140, 0, 0.6);
+  padding: 0 45px;
+}
+
+.game-btn:hover::before {
+  left: 10px;
+  opacity: 1;
+}
+
+.game-btn:hover::after {
+  right: 10px;
+  opacity: 1;
+}
+
+.game-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 12px -5px rgba(255, 140, 0, 0.4);
+}
+
+/* ===== Game Over Section ===== */
+.game-over-container {
+  margin-top: 10px;
+  padding: 15px;
+  text-align: center;
+  background: linear-gradient(145deg, #FFF9E6, #FFF0C0);
+  border-radius: 25px;
+  flex-shrink: 0;
+  border: 3px solid #FFD700;
+}
+
+.game-over {
+  font-size: 36px;
+  font-weight: bold;
+  color: #C62828;
+  text-align: center;
+  margin-bottom: 10px;
+  animation: bananaShake 0.5s ease;
+  text-shadow: 2px 2px 0 #FFD700;
+}
+
+@keyframes bananaShake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+  20%, 40%, 60%, 80% { transform: translateX(8px); }
+}
+
+/* Restart button specific styles */
+.game-over-container .game-btn {
+  background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+  min-width: 220px;
+  font-size: 20px;
+  color: white;
+}
+
+/* ===== Banana Decoration Elements ===== */
+.game-wrap::before {
+  content: '🍌🍌🍌';
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 35px;
+  opacity: 0.2;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.game-wrap::after {
+  content: '🍌🍌🍌';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 35px;
+  opacity: 0.2;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 1200px) {
+  .game-title {
+    font-size: 38px;
+  }
+  
+  .game-title::before,
+  .game-title::after {
+    font-size: 40px;
+  }
+  
+  .game-board {
+    padding: 15px;
+  }
+  
+  .banana-img {
+    transform: scale(1.03);
+  }
+}
+
+@media (max-width: 992px) {
+  .game-title {
+    font-size: 36px;
+  }
+  
+  .game-title::before,
+  .game-title::after {
+    font-size: 38px;
+  }
+  
+  .game-board {
+    flex: 1.8;
+  }
+  
+  .answer-label {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .game-wrap {
+    padding: 15px;
+  }
+  
+  .game-title {
+    font-size: 32px;
+  }
+  
+  .game-title::before,
+  .game-title::after {
+    font-size: 35px;
+    margin: 0 5px;
+  }
+  
+  .game-board {
+    flex: 1.5;
+    padding: 12px;
+  }
+  
+  .banana-img {
+    transform: scale(1);
+  }
+  
+  .answer-area {
+    flex-direction: column;
+    border-radius: 40px;
+    padding: 15px;
+  }
+  
+  .answer-input {
+    width: 100px;
+    height: 60px;
+  }
+  
+  .game-hud {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+  }
+  
+  .game-hud span {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .game-btn {
+    width: 100%;
+    padding: 0 15px;
+  }
+  
+  .game-btn:hover {
+    padding: 0 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-wrap {
+    padding: 10px;
+  }
+  
+  .game-title {
+    font-size: 26px;
+  }
+  
+  .game-title::before,
+  .game-title::after {
+    font-size: 30px;
+    margin: 0 3px;
+  }
+  
+  .game-board {
+    flex: 1.2;
+    padding: 8px;
+  }
+  
+  .answer-label {
+    font-size: 20px;
+  }
+  
+  .answer-input {
+    width: 80px;
+    height: 55px;
+    font-size: 30px;
+  }
+  
+  .game-status {
+    font-size: 16px;
+    padding: 8px 12px;
+  }
+  
+  .game-over {
+    font-size: 28px;
+  }
+}
+
+/* ===== Landscape Mode ===== */
+@media (max-height: 700px) and (orientation: landscape) {
+  .game-wrap {
+    height: 98vh;
+    padding: 8px;
+  }
+  
+  .game-title {
+    font-size: 28px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+  }
+  
+  .game-title::before,
+  .game-title::after {
+    font-size: 30px;
+  }
+  
+  .game-board {
+    flex: 2.5;
+    padding: 8px;
+  }
+  
+  .banana-img {
+    transform: scale(1.02);
+  }
+  
+  .game-status {
+    margin: 5px 0;
+    padding: 6px 15px;
+    font-size: 16px;
+  }
+  
+  .game-hud {
+    margin-bottom: 5px;
+    padding: 6px;
+    gap: 12px;
+  }
+  
+  .game-hud span {
+    padding: 4px 12px;
+    font-size: 16px;
+  }
+  
+  .answer-area {
+    padding: 8px 12px;
+  }
+  
+  .answer-input {
+    width: 60px;
+    height: 40px;
+    font-size: 24px;
+  }
+  
+  .game-btn {
+    height: 40px;
+    padding: 0 18px;
+    font-size: 15px;
+  }
+  
+  .game-btn:hover {
+    padding: 0 25px;
+  }
+}
+
+/* ===== Ultra-Wide Screens ===== */
+@media (min-width: 1600px) {
+  .game-wrap {
+    max-width: 1600px;
+    height: 90vh;
+  }
+  
+  .game-board {
+    flex: 2.5;
+  }
+  
+  .banana-img {
+    transform: scale(1.1);
+  }
+  
+  .game-title {
+    font-size: 52px;
+  }
+  
+  .game-title::before,
+  .game-title::after {
+    font-size: 55px;
+  }
+}
+
+/* ===== Accessibility ===== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ===== Focus States ===== */
+.answer-input:focus-visible,
+.game-btn:focus-visible {
+  outline: 3px solid #FFA500;
+  outline-offset: 3px;
+}
+
+/* ===== Loading Animation ===== */
+.loading-spinner {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 5px solid #FFF0C0;
+  border-top: 5px solid #FFD700;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== Success/Error Animations ===== */
+@keyframes correctPulse {
+  0% { transform: scale(1); background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); }
+  50% { transform: scale(1.02); background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%); }
+  100% { transform: scale(1); background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); }
+}
+
+@keyframes wrongPulse {
+  0% { transform: scale(1); background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); }
+  50% { transform: scale(1.02); background: linear-gradient(135deg, #FF8C00 0%, #FF4500 100%); }
+  100% { transform: scale(1); background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); }
+}
+
+.game-status.correct {
+  animation: correctPulse 0.5s ease;
+}
+
+.game-status.wrong {
+  animation: wrongPulse 0.5s ease;
+}
+
+/* ===== Banana Pattern Background ===== */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(circle at 10px 10px, rgba(255, 255, 255, 0.2) 2px, transparent 2px);
+  background-size: 30px 30px;
+  pointer-events: none;
+  z-index: -1;
+}

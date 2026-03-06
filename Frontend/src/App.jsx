@@ -9,13 +9,14 @@ import Game from "./pages/Game";
 function App() {
   return (
     <div className="app-container">
-      <h1>Banana Quiz App 🍌</h1>
 
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/game" element={<Game />} />
-      </Routes>
+      <div className="page-content">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/game" element={<Game />} />
+        </Routes>
+      </div>
 
       
 

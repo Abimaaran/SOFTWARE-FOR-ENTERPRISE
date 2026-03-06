@@ -1,0 +1,824 @@
+/* ===== Register.css - Banana Theme Register Page with Smaller Div ===== */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+/* ===== Base Styles - Full Screen ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  position: relative;
+}
+
+.page {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: linear-gradient(-45deg, #FFD700, #FFA500, #FF8C00, #FFD700);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+/* ===== Animated Background Elements ===== */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Floating Bananas Animation */
+.floating-banana {
+  position: absolute;
+  font-size: 35px; /* Slightly smaller */
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+  animation: float 6s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(8deg); }
+}
+
+.banana-1 {
+  top: 10%;
+  left: 5%;
+  animation: float 7s infinite;
+}
+
+.banana-2 {
+  top: 20%;
+  right: 8%;
+  animation: float 8s infinite reverse;
+  font-size: 45px;
+}
+
+.banana-3 {
+  bottom: 15%;
+  left: 10%;
+  animation: float 9s infinite 2s;
+  font-size: 40px;
+}
+
+.banana-4 {
+  bottom: 25%;
+  right: 12%;
+  animation: float 7.5s infinite 1s;
+  font-size: 50px;
+}
+
+/* Falling Banana Peels Animation */
+.peel {
+  position: absolute;
+  font-size: 22px;
+  opacity: 0.15;
+  pointer-events: none;
+  animation: fall 10s infinite linear;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.2;
+  }
+  90% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.peel-1 {
+  left: 15%;
+  animation: fall 12s infinite;
+  animation-delay: 2s;
+}
+
+.peel-2 {
+  left: 45%;
+  animation: fall 15s infinite;
+  animation-delay: 5s;
+}
+
+.peel-3 {
+  left: 75%;
+  animation: fall 10s infinite;
+  animation-delay: 1s;
+}
+
+/* Shining Stars Animation */
+.star {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 18px;
+  pointer-events: none;
+  animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.15); }
+}
+
+.star-1 {
+  top: 15%;
+  right: 25%;
+  animation: twinkle 4s infinite 1s;
+}
+
+.star-2 {
+  bottom: 20%;
+  left: 35%;
+  animation: twinkle 3.5s infinite 0.5s;
+}
+
+/* ===== Register Container - SMALLER SIZE ===== */
+.register-wrap {
+  width: 90vw;
+  max-width: 380px; /* Reduced from 480px */
+  height: auto;
+  margin: 0 auto;
+  padding: 25px 22px; /* Reduced padding */
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 28px; /* Smaller radius */
+  box-shadow: 0 25px 40px -12px rgba(255, 140, 0, 0.4);
+  animation: slideUp 0.6s ease-out, containerGlow 3s infinite;
+  border: 2px solid #FFD700; /* Thinner border */
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+}
+
+@keyframes containerGlow {
+  0%, 100% { box-shadow: 0 25px 40px -12px rgba(255, 140, 0, 0.4); }
+  50% { box-shadow: 0 25px 50px -8px rgba(255, 140, 0, 0.6); }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Banana Decoration with Animation - Smaller ===== */
+.register-wrap::before {
+  content: '🍌🍌';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px; /* Smaller */
+  opacity: 0.15;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 0;
+  animation: spinBananas 8s infinite linear;
+}
+
+.register-wrap::after {
+  content: '🍌🍌';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px; /* Smaller */
+  opacity: 0.15;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 0;
+  animation: spinBananas 8s infinite reverse;
+}
+
+@keyframes spinBananas {
+  from { transform: translateX(-50%) rotate(0deg); }
+  to { transform: translateX(-50%) rotate(360deg); }
+}
+
+/* ===== Title - Smaller ===== */
+.register-title {
+  font-size: 32px; /* Reduced from 42px */
+  font-weight: 800;
+  margin-bottom: 8px; /* Reduced margin */
+  color: #8B4513;
+  text-align: center;
+  position: relative;
+  padding-bottom: 8px; /* Reduced padding */
+  text-shadow: 2px 2px 0 #FFD700;
+  letter-spacing: 1px;
+  z-index: 1;
+  line-height: 1.2;
+  animation: titlePulse 2s infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* Reduced gap */
+}
+
+@keyframes titlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.01); }
+}
+
+.register-title span {
+  display: inline-block;
+  font-size: 36px; /* Reduced from 48px */
+  animation: rotate 3s infinite;
+}
+
+.register-title span:first-child {
+  animation: rotate 3s infinite;
+}
+
+.register-title span:last-child {
+  animation: rotate 3s infinite reverse;
+}
+
+@keyframes rotate {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+.register-subtitle {
+  display: block;
+  font-size: 14px; /* Reduced from 16px */
+  font-weight: 400;
+  color: #FFA500;
+  margin-top: 3px;
+  margin-bottom: 15px; /* Reduced margin */
+  text-shadow: none;
+  text-align: center;
+  animation: fadeInOut 3s infinite;
+  letter-spacing: 0.5px;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* ===== Form Container - Tighter ===== */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Reduced from 16px */
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Input Groups ===== */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* Reduced from 6px */
+  animation: slideInRight 0.5s ease-out;
+}
+
+.input-group:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.input-group:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.input-group:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.input-label {
+  font-size: 13px; /* Reduced from 15px */
+  font-weight: 600;
+  color: #8B4513;
+  margin-left: 3px;
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Reduced gap */
+}
+
+.input-label::before {
+  content: '🍌';
+  font-size: 14px; /* Reduced from 16px */
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+/* ===== Input Fields - Smaller ===== */
+.register-input {
+  width: 100%;
+  height: 45px; /* Reduced from 52px */
+  padding: 0 14px; /* Reduced padding */
+  font-size: 14px; /* Reduced from 16px */
+  border-radius: 14px; /* Smaller radius */
+  border: 2px solid #FFD700;
+  background: white;
+  color: #8B4513;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px -4px rgba(255, 140, 0, 0.3);
+  font-family: 'Poppins', sans-serif;
+}
+
+.register-input:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px -4px rgba(255, 140, 0, 0.4);
+}
+
+.register-input:focus {
+  border-color: #FFA500;
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.15);
+  transform: scale(1.01);
+  background: #FFF9E6;
+}
+
+.register-input::placeholder {
+  color: #FFD700;
+  opacity: 0.7;
+  font-size: 13px; /* Smaller */
+}
+
+/* ===== Password Input Container ===== */
+.password-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 18px; /* Reduced from 22px */
+  cursor: pointer;
+  padding: 3px;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+  animation: eyeWiggle 3s infinite;
+}
+
+@keyframes eyeWiggle {
+  0%, 100% { transform: translateY(-50%) rotate(0deg); }
+  25% { transform: translateY(-50%) rotate(-3deg); }
+  75% { transform: translateY(-50%) rotate(3deg); }
+}
+
+.password-toggle:hover {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.08);
+  animation: none;
+}
+
+/* ===== Password Strength Indicator - Smaller ===== */
+.password-strength {
+  margin-top: 3px;
+  height: 3px; /* Thinner */
+  border-radius: 1.5px;
+  background: #e0e0e0;
+  overflow: hidden;
+}
+
+.strength-bar {
+  height: 100%;
+  width: 0%;
+  transition: all 0.3s ease;
+}
+
+.strength-bar.weak {
+  width: 33.33%;
+  background: #f56565;
+}
+
+.strength-bar.medium {
+  width: 66.66%;
+  background: #fbbf24;
+}
+
+.strength-bar.strong {
+  width: 100%;
+  background: #48bb78;
+}
+
+.strength-text {
+  font-size: 11px; /* Smaller */
+  margin-top: 2px;
+  text-align: right;
+}
+
+/* ===== Terms Checkbox - Smaller ===== */
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Reduced gap */
+  margin: 2px 0; /* Reduced margin */
+  animation: fadeIn 1s ease 0.3s both;
+}
+
+.terms-checkbox input[type="checkbox"] {
+  width: 16px; /* Smaller */
+  height: 16px; /* Smaller */
+  accent-color: #FFD700;
+  cursor: pointer;
+}
+
+.terms-checkbox label {
+  font-size: 12px; /* Smaller */
+  color: #8B4513;
+  cursor: pointer;
+}
+
+.terms-checkbox a {
+  color: #FFA500;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 12px; /* Smaller */
+}
+
+/* ===== Register Button - Smaller ===== */
+.register-btn {
+  height: 48px; /* Reduced from 58px */
+  padding: 0 25px; /* Reduced padding */
+  font-size: 18px; /* Reduced from 20px */
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 28px; /* Smaller radius */
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #8B4513;
+  border: 2px solid white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 15px -6px rgba(255, 140, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+  margin-top: 5px; /* Reduced margin */
+  font-family: 'Poppins', sans-serif;
+  animation: buttonPulse 2s infinite;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+@keyframes buttonPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.01); }
+}
+
+.register-btn::before {
+  content: '🍌';
+  position: absolute;
+  left: -25px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.register-btn::after {
+  content: '🍌';
+  position: absolute;
+  right: -25px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.register-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 20px -6px rgba(255, 140, 0, 0.5);
+  padding: 0 32px;
+  animation: none;
+}
+
+.register-btn:hover::before {
+  left: 10px;
+  opacity: 1;
+  animation: bounce 0.5s infinite;
+}
+
+.register-btn:hover::after {
+  right: 10px;
+  opacity: 1;
+  animation: bounce 0.5s infinite reverse;
+}
+
+/* ===== Divider - Smaller ===== */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 10px 0 5px; /* Reduced margin */
+  color: #8B4513;
+  animation: fadeIn 1s ease 0.4s both;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #FFD700; /* Thinner */
+}
+
+.divider span {
+  padding: 0 10px; /* Reduced padding */
+  font-size: 12px; /* Smaller */
+  font-weight: 600;
+  color: #FFA500;
+}
+
+/* ===== Login Section - Smaller ===== */
+.login-section {
+  text-align: center;
+  margin-top: 5px; /* Reduced margin */
+  animation: slideUp 0.6s ease 0.5s both;
+}
+
+.login-text {
+  font-size: 13px; /* Smaller */
+  color: #8B4513;
+  margin-bottom: 5px; /* Reduced margin */
+}
+
+.login-btn {
+  height: 42px; /* Reduced from 50px */
+  padding: 0 20px; /* Reduced padding */
+  font-size: 15px; /* Reduced from 17px */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 25px; /* Smaller radius */
+  background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+  color: white;
+  border: 2px solid #FFD700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 12px -4px rgba(255, 140, 0, 0.3);
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  display: block;
+}
+
+.login-btn::before {
+  content: '←';
+  position: absolute;
+  left: -18px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.login-btn::after {
+  content: '🍌';
+  position: absolute;
+  right: -18px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 16px -4px rgba(255, 140, 0, 0.4);
+}
+
+.login-btn:hover::before {
+  left: 8px;
+  opacity: 1;
+}
+
+.login-btn:hover::after {
+  right: 8px;
+  opacity: 1;
+}
+
+/* ===== Alert Messages - Smaller ===== */
+.alert {
+  padding: 10px 14px; /* Reduced padding */
+  border-radius: 12px; /* Smaller radius */
+  font-size: 13px; /* Smaller */
+  font-weight: 600;
+  text-align: center;
+  animation: slideInAlert 0.3s ease;
+  margin-bottom: 12px; /* Reduced margin */
+}
+
+@keyframes slideInAlert {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Loading Spinner - Smaller ===== */
+.loading-spinner {
+  display: inline-block;
+  width: 16px; /* Smaller */
+  height: 16px; /* Smaller */
+  border: 2px solid #FFF9E6; /* Thinner */
+  border-top: 2px solid #FFA500;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 6px; /* Smaller */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .register-wrap {
+    max-width: 340px; /* Smaller on mobile */
+    padding: 22px 18px;
+  }
+  
+  .register-title {
+    font-size: 28px;
+    gap: 8px;
+  }
+  
+  .register-title span {
+    font-size: 32px;
+  }
+  
+  .register-subtitle {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  
+  .register-input {
+    height: 42px;
+    font-size: 13px;
+  }
+  
+  .register-btn {
+    height: 44px;
+    font-size: 16px;
+  }
+  
+  .login-btn {
+    height: 40px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-wrap {
+    max-width: 300px; /* Even smaller on phones */
+    padding: 20px 15px;
+  }
+  
+  .register-title {
+    font-size: 26px;
+    gap: 6px;
+  }
+  
+  .register-title span {
+    font-size: 28px;
+  }
+  
+  .register-subtitle {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+  
+  .register-input {
+    height: 40px;
+    font-size: 13px;
+    padding: 0 12px;
+  }
+  
+  .register-btn {
+    height: 42px;
+    font-size: 15px;
+  }
+  
+  .login-btn {
+    height: 38px;
+    font-size: 13px;
+  }
+  
+  .terms-checkbox label {
+    font-size: 11px;
+  }
+}
+
+/* ===== Landscape Mode ===== */
+@media (max-height: 650px) and (orientation: landscape) {
+  .register-wrap {
+    padding: 15px;
+    max-width: 450px;
+  }
+  
+  .register-title {
+    font-size: 24px;
+    margin-bottom: 5px;
+    gap: 6px;
+  }
+  
+  .register-title span {
+    font-size: 28px;
+  }
+  
+  .register-subtitle {
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+  
+  .register-form {
+    gap: 8px;
+  }
+  
+  .register-input {
+    height: 38px;
+    font-size: 13px;
+  }
+  
+  .register-btn {
+    height: 40px;
+    font-size: 15px;
+    margin-top: 3px;
+  }
+  
+  .login-btn {
+    height: 38px;
+  }
+}
+
+/* ===== Accessibility ===== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ===== Focus States ===== */
+.register-input:focus-visible,
+.register-btn:focus-visible,
+.login-btn:focus-visible,
+.password-toggle:focus-visible {
+  outline: 2px solid #FFA500;
+  outline-offset: 2px;
+}
+
+/* ===== Banana Pattern Background ===== */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(circle at 10px 10px, rgba(255, 255, 255, 0.08) 2px, transparent 2px);
+  background-size: 25px 25px;
+  pointer-events: none;
+  z-index: 0;
+}

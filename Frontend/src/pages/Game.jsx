@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "./Game.css";
 
 function Game() {
   const [imgUrl, setImgUrl] = useState("");
@@ -51,49 +52,52 @@ function Game() {
   };
 
   return (
-    <div className="game-wrap">
-      <h1 className="game-title">The Banana Game</h1>
+    <div className="page">
+      <div className="game-wrap">
+        
+        <h1 className="game-title">The Banana Game</h1>
 
-      <div className="game-board">
-        {imgUrl ? (
-          <img className="banana-img" src={imgUrl} alt="Banana puzzle" />
+        <div className="game-board">
+          {imgUrl ? (
+            <img className="banana-img" src={imgUrl} alt="Banana puzzle" />
+          ) : (
+            <p>Loading image...</p>
+          )}
+        </div>
+
+        <p className="game-status">{msg}</p>
+
+        <div className="game-hud">
+          <span>Score: {score}</span>
+          <span>Lives: {lives}</span>
+        </div>
+
+        {lives <= 0 ? (
+          <div>
+            <h2>Game Over 😢</h2>
+            <button className="game-btn" onClick={restart}>
+              Restart
+            </button>
+          </div>
         ) : (
-          <p>Loading image...</p>
+          <div className="answer-area">
+            <div className="answer-label">Enter the missing digit:</div>
+
+            <input
+              className="answer-input"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              inputMode="numeric"
+              maxLength={1}
+              placeholder=""
+            />
+
+            <button className="game-btn" onClick={submit}>
+              Submit
+            </button>
+          </div>
         )}
       </div>
-
-      <p className="game-status">{msg}</p>
-
-      <div className="game-hud">
-        <span>Score: {score}</span>
-        <span>Lives: {lives}</span>
-      </div>
-
-      {lives <= 0 ? (
-        <div>
-          <h2>Game Over 😢</h2>
-          <button className="game-btn" onClick={restart}>
-            Restart
-          </button>
-        </div>
-      ) : (
-        <div className="answer-area">
-          <div className="answer-label">Enter the missing digit:</div>
-
-          <input
-            className="answer-input"
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            inputMode="numeric"
-            maxLength={1}
-            placeholder=""
-          />
-
-          <button className="game-btn" onClick={submit}>
-            Submit
-          </button>
-        </div>
-      )}
     </div>
   );
 }
