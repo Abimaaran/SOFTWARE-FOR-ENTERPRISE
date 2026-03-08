@@ -27,7 +27,11 @@ router.post("/register", async (req, res) => {
       password: hash,
     });
 
-    res.status(201).json({ message: "Registered", userId: user._id });
+    res.status(201).json({ 
+      message: "Registered", 
+      userId: user._id,
+      highScore: user.highScore 
+    });
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
@@ -58,7 +62,40 @@ router.post("/login", async (req, res) => {
       { expiresIn: "2h" }
     );
 
-    res.json({ message: "Login success", token });
+    res.json({ 
+      message: "Login success", 
+      token,
+      highScore: user.highScore
+    });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+// UPDATE HIGH SCORE
+const authMiddleware = require("../middleware/authMiddleware");
+
+router.put("/highscore", authMiddleware, async (req, res) => {
+  try {
+    const { score } = req.body;
+    const userId = req.user.userId;
+
+    if (score === undefined) {
+      return res.status(400).json({ message: "Score is required" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (score > user.highScore) {
+      user.highScore = score;
+      await user.save();
+      return res.json({ message: "High score updated", highScore: user.highScore });
+    }
+
+    res.json({ message: "Score not higher than high score", highScore: user.highScore });
   } catch (e) {
     res.status(500).json({ message: e.message });
   }

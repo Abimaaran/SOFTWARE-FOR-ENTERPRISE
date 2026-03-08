@@ -32,7 +32,9 @@ function Login() {
       });
 
       const token = res.data.token;
+      const highScore = res.data.highScore;
       localStorage.setItem("token", token);
+      localStorage.setItem("highScore", highScore);
 
       setAlert({
         show: true,

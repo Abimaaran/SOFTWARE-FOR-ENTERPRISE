@@ -28,6 +28,7 @@ app.get("/protected", authMiddleware, (req, res) => {
   });
 });
 
+
 // MongoDB connect
 mongoose
   .connect(process.env.MONGO_URI)
