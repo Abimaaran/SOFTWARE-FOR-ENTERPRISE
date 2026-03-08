@@ -8,6 +8,7 @@ function Game() {
   const [answer, setAnswer] = useState("");
   const [msg, setMsg] = useState("Quest is ready.");
   const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(Number(localStorage.getItem("highScore")) || 0);
   const [lives, setLives] = useState(3);
   const [timeLeft, setTimeLeft] = useState(15);
 
@@ -46,6 +47,31 @@ function Game() {
 
     return () => clearTimeout(timer);
   }, [timeLeft, lives]);
+
+  useEffect(() => {
+    if (lives <= 0) {
+      handleGameOver();
+    }
+  }, [lives]);
+
+  const handleGameOver = async () => {
+    if (score > highScore) {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.put(
+          "http://localhost:5000/auth/highscore",
+          { score },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const newHighScore = res.data.highScore;
+        setHighScore(newHighScore);
+        localStorage.setItem("highScore", newHighScore);
+        setMsg("🏆 New High Score!");
+      } catch (e) {
+        console.error("Failed to update high score", e);
+      }
+    }
+  };
 
   const submit = () => {
     if (lives <= 0) return;
@@ -89,6 +115,7 @@ function Game() {
 
         <div className="game-hud">
           <span>Score: {score}</span>
+          <span>High Score: {highScore}</span>
           <span>Lives: {lives}</span>
           <span className={timeLeft <= 10 ? 'timer-warning' : ''}>Time: {timeLeft}s</span>
         </div>
