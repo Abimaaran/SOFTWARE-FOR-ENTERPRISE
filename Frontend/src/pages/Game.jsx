@@ -101,7 +101,6 @@ function Game() {
   return (
     <div className="page">
       <div className="game-wrap">
-        <h1 className="game-title">The Banana Game</h1>
 
         <div className="game-board">
           {imgUrl ? (

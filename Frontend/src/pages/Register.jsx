@@ -7,6 +7,7 @@ function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,6 +50,15 @@ function Register() {
         show: true,
         type: 'error',
         message: 'Password must be at least 6 characters 🔒'
+      });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setAlert({
+        show: true,
+        type: 'error',
+        message: 'Passwords do not match 🔒'
       });
       return;
     }
@@ -181,6 +191,21 @@ function Register() {
                 </div>
               </>
             )}
+          </div>
+
+          <div className="input-group">
+            <label className="input-label">Confirm Password</label>
+            <div className="password-container">
+              <input
+                className="register-input"
+                type={showPassword ? "text" : "password"}
+                placeholder="Confirm your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                onKeyPress={handleKeyPress}
+                disabled={loading}
+              />
+            </div>
           </div>
 
           {/* Terms and Conditions */}

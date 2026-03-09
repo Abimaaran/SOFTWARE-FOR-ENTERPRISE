@@ -1,0 +1,102 @@
+.leaderboard-page {
+  width: 100%;
+  height: calc(100vh - 70px); /* Fixed height to trigger scrollbar */
+  overflow-y: auto;
+  padding: 100px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+}
+
+/* Custom Banana Scrollbar for Leaderboard only */
+.leaderboard-page::-webkit-scrollbar {
+  width: 12px;
+}
+
+.leaderboard-page::-webkit-scrollbar-track {
+  background: rgba(139, 69, 19, 0.1);
+  border-radius: 10px;
+}
+
+.leaderboard-page::-webkit-scrollbar-thumb {
+  background: #f9d71c;
+  border: 3px solid #8B4513; 
+  border-radius: 10px;
+}
+
+.leaderboard-page::-webkit-scrollbar-thumb:hover {
+  background: #FFD700;
+}
+
+.leaderboard-wrap {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2.5rem;
+  border-radius: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border: 4px solid #f9d71c;
+}
+
+.leaderboard-title {
+  color: #5c4033;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.leaderboard-header {
+  display: grid;
+  grid-template-columns: 80px 1fr 120px;
+  font-weight: bold;
+  padding: 1rem;
+  background: #fdf2b1;
+  border-radius: 1rem;
+  color: #5c4033;
+}
+
+.leaderboard-item {
+  display: grid;
+  grid-template-columns: 80px 1fr 120px;
+  padding: 1rem;
+  background: white;
+  border-radius: 1rem;
+  transition: transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  align-items: center;
+}
+
+.leaderboard-item:hover {
+  transform: scale(1.02);
+  background: #fff9db;
+}
+
+.rank {
+  font-weight: bold;
+  color: #f9d71c;
+  font-size: 1.2rem;
+}
+
+.username {
+  text-align: left;
+  padding-left: 1rem;
+  color: #333;
+}
+
+.score {
+  font-weight: bold;
+  color: #5c4033;
+}
+
+.error-msg {
+  color: #ff4d4d;
+  margin-bottom: 1rem;
+}
