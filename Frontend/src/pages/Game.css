@@ -18,7 +18,7 @@ html, body {
 }
 
 .page {
-  height: 100%;
+  height: calc(100vh - 70px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,11 +26,10 @@ html, body {
   background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
 }
 
-/* ===== Game Container - Full Height ===== */
 .game-wrap {
   width: 95vw;
   max-width: 1400px;
-  height: 90vh; /* Increased from 85vh for more space */
+  height: 90vh; 
   margin: 0 auto;
   padding: 20px;
   background: rgba(255, 255, 255, 0.98);
@@ -111,7 +110,8 @@ html, body {
   box-shadow: 
     inset 0 2px 10px rgba(255, 215, 0, 0.3),
     0 20px 30px -10px rgba(255, 140, 0, 0.3);
-  flex: 5; /* Slightly increased for bigger image */
+  flex: 3; /* Reduced from 5 to give more space below */
+  max-height: 50vh; /* Adding a max height limit */
   min-height: 0;
   display: flex;
   align-items: center;
