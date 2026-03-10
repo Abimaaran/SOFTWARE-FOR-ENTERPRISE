@@ -3,6 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import GameSelection from "./pages/GameSelection";
+import Profile from "./pages/Profile";
+import UserActivity from "./pages/UserActivity";
 import Game from "./pages/Game";
 import Leaderboard from "./pages/Leaderboard";
 import Navbar from "./components/Navbar";
@@ -29,6 +31,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <Game />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/activity" 
+            element={
+              <ProtectedRoute>
+                <UserActivity />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute>
+                <Profile />
               </ProtectedRoute>
             } 
           />

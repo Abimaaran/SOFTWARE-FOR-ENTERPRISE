@@ -66,6 +66,8 @@ router.post("/login", async (req, res) => {
     res.json({ 
       message: "Login success", 
       token,
+      username: user.username,
+      email: user.email,
       highScoreEasy: user.highScoreEasy,
       highScoreHard: user.highScoreHard
     });
@@ -100,6 +102,47 @@ router.put("/highscore", authMiddleware, async (req, res) => {
     }
 
     res.json({ message: "Score not higher than high score", highScore: user[field] });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+// UPDATE PROFILE
+router.put("/update-profile", authMiddleware, async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    const userId = req.user.userId;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update username if provided
+    if (username) user.username = username;
+
+    // Update email if provided and check for uniqueness
+    if (email && email !== user.email) {
+      const exists = await User.findOne({ email });
+      if (exists) {
+        return res.status(409).json({ message: "Email already in use" });
+      }
+      user.email = email;
+    }
+
+    // Update password if provided
+    if (password) {
+      const hash = await bcrypt.hash(password, 10);
+      user.password = hash;
+    }
+
+    await user.save();
+
+    res.json({
+      message: "Profile updated successfully",
+      username: user.username,
+      email: user.email
+    });
   } catch (e) {
     res.status(500).json({ message: e.message });
   }

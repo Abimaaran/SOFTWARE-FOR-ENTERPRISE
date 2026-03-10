@@ -36,6 +36,8 @@ function Login() {
       localStorage.setItem("token", token);
       localStorage.setItem("highScoreEasy", highScoreEasy);
       localStorage.setItem("highScoreHard", highScoreHard);
+      localStorage.setItem("username", res.data.username);
+      localStorage.setItem("email", res.data.email);
 
       setAlert({
         show: true,
