@@ -47,6 +47,35 @@
   margin-bottom: 2rem;
 }
 
+.difficulty-selector {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.diff-btn {
+  padding: 0.6rem 1.5rem;
+  border-radius: 1.5rem;
+  border: 2px solid #f9d71c;
+  background: white;
+  color: #5c4033;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.diff-btn:hover {
+  background: #fff9db;
+  transform: translateY(-2px);
+}
+
+.diff-btn.active {
+  background: #f9d71c;
+  box-shadow: 0 4px 10px rgba(249, 215, 28, 0.3);
+}
+
 .leaderboard-list {
   display: flex;
   flex-direction: column;
