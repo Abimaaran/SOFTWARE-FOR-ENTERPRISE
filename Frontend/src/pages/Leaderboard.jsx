@@ -4,14 +4,16 @@ import "./Leaderboard.css";
 
 function Leaderboard() {
   const [players, setPlayers] = useState([]);
+  const [difficulty, setDifficulty] = useState("easy");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
+        setLoading(true);
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/auth/leaderboard", {
+        const res = await axios.get(`http://localhost:5000/auth/leaderboard?difficulty=${difficulty}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPlayers(res.data);
@@ -23,7 +25,7 @@ function Leaderboard() {
     };
 
     fetchLeaderboard();
-  }, []);
+  }, [difficulty]);
 
   if (loading) return <div className="leaderboard-page">Loading Leaderboard...</div>;
 
@@ -31,6 +33,22 @@ function Leaderboard() {
     <div className="leaderboard-page">
       <div className="leaderboard-wrap">
         <h1 className="leaderboard-title">🏆 Banana Peelers 🏆</h1>
+        
+        <div className="difficulty-selector">
+          <button 
+            className={`diff-btn ${difficulty === 'easy' ? 'active' : ''}`}
+            onClick={() => setDifficulty('easy')}
+          >
+            🍌 Easy
+          </button>
+          <button 
+            className={`diff-btn ${difficulty === 'hard' ? 'active' : ''}`}
+            onClick={() => setDifficulty('hard')}
+          >
+            🔥 Hard
+          </button>
+        </div>
+
         {error && <p className="error-msg">{error}</p>}
         <div className="leaderboard-list">
           <div className="leaderboard-header">

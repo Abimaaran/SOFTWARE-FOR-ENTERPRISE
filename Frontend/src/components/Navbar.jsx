@@ -19,7 +19,7 @@ function Navbar() {
         <Link to="/game">🍌 Banana Game</Link>
       </div>
       <div className="nav-links">
-        <Link to="/game" className="nav-item">Play</Link>
+        <Link to="/selection" className="nav-item">Play</Link>
         <Link to="/leaderboard" className="nav-item">Leaderboard</Link>
         <button onClick={handleLogout} className="logout-btn">Logout</button>
       </div>

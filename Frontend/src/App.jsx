@@ -2,6 +2,7 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import GameSelection from "./pages/GameSelection";
 import Game from "./pages/Game";
 import Leaderboard from "./pages/Leaderboard";
 import Navbar from "./components/Navbar";
@@ -16,7 +17,15 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route 
-            path="/game" 
+            path="/selection" 
+            element={
+              <ProtectedRoute>
+                <GameSelection />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/game/:difficulty" 
             element={
               <ProtectedRoute>
                 <Game />

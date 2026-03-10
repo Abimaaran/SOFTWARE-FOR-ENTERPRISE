@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import "./Game.css";
 
 function Game() {
+  const { difficulty } = useParams();
+  const isHard = difficulty === "hard";
+
   const [imgUrl, setImgUrl] = useState("");
   const [solution, setSolution] = useState(null);
   const [answer, setAnswer] = useState("");
   const [msg, setMsg] = useState("Quest is ready.");
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(Number(localStorage.getItem("highScore")) || 0);
-  const [lives, setLives] = useState(3);
-  const [timeLeft, setTimeLeft] = useState(15);
+  const [highScore, setHighScore] = useState(
+    Number(localStorage.getItem(isHard ? "highScoreHard" : "highScoreEasy")) || 0
+  );
+  const [lives, setLives] = useState(isHard ? 2 : 3);
+  const [timeLeft, setTimeLeft] = useState(isHard ? 20 : 60);
 
   const loadQuestion = async () => {
     try {
       setMsg("Loading...");
       setAnswer("");
-      setTimeLeft(60);
+      setTimeLeft(isHard ? 20 : 60);
 
       const res = await axios.get("http://localhost:5000/banana/question");
       setImgUrl(res.data.question);
@@ -60,12 +66,17 @@ function Game() {
         const token = localStorage.getItem("token");
         const res = await axios.put(
           "http://localhost:5000/auth/highscore",
-          { score },
+          { score, difficulty },
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const newHighScore = res.data.highScore;
         setHighScore(newHighScore);
-        localStorage.setItem("highScore", newHighScore);
+        
+        // Update local storage for the specific difficulty
+        const storageKey = isHard ? "highScoreHard" : "highScoreEasy";
+        localStorage.setItem(storageKey, newHighScore);
+        localStorage.setItem("highScore", newHighScore); // backward compatibility
+        
         setMsg("🏆 New High Score!");
       } catch (e) {
         console.error("Failed to update high score", e);
@@ -92,8 +103,8 @@ function Game() {
 
   const restart = () => {
     setScore(0);
-    setLives(3);
-    setTimeLeft(60);
+    setLives(isHard ? 2 : 3);
+    setTimeLeft(isHard ? 20 : 60);
     setMsg("Quest is ready.");
     loadQuestion();
   };

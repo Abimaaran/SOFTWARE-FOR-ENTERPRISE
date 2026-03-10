@@ -32,9 +32,10 @@ function Login() {
       });
 
       const token = res.data.token;
-      const highScore = res.data.highScore;
+      const { highScoreEasy, highScoreHard } = res.data;
       localStorage.setItem("token", token);
-      localStorage.setItem("highScore", highScore);
+      localStorage.setItem("highScoreEasy", highScoreEasy);
+      localStorage.setItem("highScoreHard", highScoreHard);
 
       setAlert({
         show: true,
@@ -43,7 +44,7 @@ function Login() {
       });
 
       setTimeout(() => {
-        navigate("/game");
+        navigate("/selection");
       }, 1500);
 
     } catch (error) {
