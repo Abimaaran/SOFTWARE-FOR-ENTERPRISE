@@ -5,7 +5,8 @@ const userSchema = new mongoose.Schema(
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // later store hashed password
-    highScore: { type: Number, default: 0 },
+    highScoreEasy: { type: Number, default: 0 },
+    highScoreHard: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
