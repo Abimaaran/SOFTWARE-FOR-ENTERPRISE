@@ -30,7 +30,8 @@ router.post("/register", async (req, res) => {
     res.status(201).json({ 
       message: "Registered", 
       userId: user._id,
-      highScore: user.highScore 
+      highScoreEasy: user.highScoreEasy,
+      highScoreHard: user.highScoreHard 
     });
   } catch (e) {
     res.status(500).json({ message: e.message });
@@ -65,7 +66,8 @@ router.post("/login", async (req, res) => {
     res.json({ 
       message: "Login success", 
       token,
-      highScore: user.highScore
+      highScoreEasy: user.highScoreEasy,
+      highScoreHard: user.highScoreHard
     });
   } catch (e) {
     res.status(500).json({ message: e.message });
@@ -77,11 +79,11 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 router.put("/highscore", authMiddleware, async (req, res) => {
   try {
-    const { score } = req.body;
+    const { score, difficulty } = req.body;
     const userId = req.user.userId;
 
-    if (score === undefined) {
-      return res.status(400).json({ message: "Score is required" });
+    if (score === undefined || !difficulty) {
+      return res.status(400).json({ message: "Score and difficulty are required" });
     }
 
     const user = await User.findById(userId);
@@ -89,16 +91,41 @@ router.put("/highscore", authMiddleware, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (score > user.highScore) {
-      user.highScore = score;
+    const field = difficulty === "hard" ? "highScoreHard" : "highScoreEasy";
+
+    if (score > user[field]) {
+      user[field] = score;
       await user.save();
-      return res.json({ message: "High score updated", highScore: user.highScore });
+      return res.json({ message: "High score updated", highScore: user[field] });
     }
 
-    res.json({ message: "Score not higher than high score", highScore: user.highScore });
+    res.json({ message: "Score not higher than high score", highScore: user[field] });
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
 });
 
-module.exports = router;
+// GET LEADERBOARD
+router.get("/leaderboard", authMiddleware, async (req, res) => {
+  try {
+    const { difficulty } = req.query;
+    const field = difficulty === "hard" ? "highScoreHard" : "highScoreEasy";
+
+    const topPlayers = await User.find({}, `username ${field}`)
+      .sort({ [field]: -1 })
+      .limit(10);
+    
+    // Map response to a common "highScore" property for easier frontend display
+    const formattedPlayers = topPlayers.map(p => ({
+      _id: p._id,
+      username: p.username,
+      highScore: p[field]
+    }));
+
+    res.json(formattedPlayers);
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+module.exports = router;
