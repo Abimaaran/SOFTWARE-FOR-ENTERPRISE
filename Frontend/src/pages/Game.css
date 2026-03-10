@@ -1,4 +1,4 @@
-/* ===== Game.css - Yellow Theme Banana Quiz with Larger Image ===== */
+/* ===== Game.css - Yellow Theme Banana Quiz with Larger Image & Pro Notifications ===== */
 
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
@@ -741,4 +741,148 @@ body::before {
   background-size: 30px 30px;
   pointer-events: none;
   z-index: -1;
+}
+
+/* ===== Professional Top-Center Game Notification ===== */
+.feedback-popup-wrap {
+  position: fixed;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  width: 100%;
+}
+
+.feedback-popup-content {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  padding: 1.2rem 2.5rem;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.2),
+    0 0 0 6px rgba(255, 215, 0, 0.2);
+  border: 3px solid #f9d71c;
+  transform: translateY(-250%);
+  opacity: 0;
+  animation: slideInFromTopNotification 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  min-width: 450px;
+}
+
+.feedback-popup-wrap.correct .feedback-popup-content {
+  border-color: #2ecc71;
+  background: linear-gradient(135deg, #ffffff 0%, #fafff8 100%);
+  box-shadow: 
+    0 20px 50px rgba(46, 204, 113, 0.25),
+    0 0 0 6px rgba(46, 204, 113, 0.15);
+}
+
+.feedback-popup-wrap.wrong .feedback-popup-content {
+  border-color: #e74c3c;
+  background: linear-gradient(135deg, #ffffff 0%, #fffafa 100%);
+  box-shadow: 
+    0 20px 50px rgba(231, 76, 60, 0.25),
+    0 0 0 6px rgba(231, 76, 60, 0.15);
+}
+
+.monkey-svg-container {
+  width: 80px;
+  height: 80px;
+  background: #fdf2b1;
+  border-radius: 50%;
+  padding: 10px;
+  border: 3px solid #8B4513;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.monkey-animated-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.feedback-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.feedback-badge {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #8B4513;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  margin-bottom: 4px;
+  opacity: 0.6;
+}
+
+.feedback-info h3 {
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 800;
+  color: #333;
+  letter-spacing: 0.5px;
+}
+
+.correct h3 {
+  color: #27ae60;
+  text-shadow: 0 2px 4px rgba(46, 204, 113, 0.1);
+}
+
+.wrong h3 {
+  color: #c0392b;
+  text-shadow: 0 2px 4px rgba(192, 57, 43, 0.1);
+}
+
+/* Animation Magic */
+@keyframes slideInFromTopNotification {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.monkey-mouth-path {
+  transform-origin: center;
+  animation: chewingMotionFinal 0.4s infinite alternate ease-in-out;
+}
+
+@keyframes chewingMotionFinal {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(1.4) translateY(-2px); }
+}
+
+.monkey-animated-svg {
+  animation: monkeyHeadBopFinal 2s infinite ease-in-out;
+}
+
+@keyframes monkeyHeadBopFinal {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(8deg); }
+}
+
+.falling-banana-svg {
+  animation: bananaToMouthAnimationFinal 0.8s ease-in forwards;
+}
+
+@keyframes bananaToMouthAnimationFinal {
+  0% { transform: translate(35px, -35px) rotate(45deg); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translate(-8px, 40px) rotate(-10deg) scale(0); opacity: 0; }
+}
+
+.wrong .monkey-animated-svg {
+  animation: disappointedShakeFinal 0.5s infinite alternate ease-in-out;
+}
+
+@keyframes disappointedShakeFinal {
+  from { transform: translateX(-6px) rotate(-12deg); }
+  to { transform: translateX(6px) rotate(12deg); }
 }

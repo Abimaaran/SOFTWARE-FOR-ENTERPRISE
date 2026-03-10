@@ -17,6 +17,29 @@ function Game() {
   );
   const [lives, setLives] = useState(isHard ? 2 : 3);
   const [timeLeft, setTimeLeft] = useState(isHard ? 20 : 60);
+  const [isPaused, setIsPaused] = useState(false);
+  const [feedbackOverlay, setFeedbackOverlay] = useState(null); // 'correct' or 'wrong'
+
+  // Audio References
+  const [correctSfx] = useState(new Audio("https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3")); // Clapping/Applause
+  const [wrongSfx] = useState(new Audio("https://cdn.pixabay.com/audio/2022/03/24/audio_333068e4c7.mp3")); // "Awww" / Disappointment sound
+  const [gameOverSfx] = useState(new Audio("https://assets.mixkit.co/active_storage/sfx/2689/2689-preview.mp3"));
+
+  const playSfx = (audio) => {
+    const soundOn = localStorage.getItem("soundOn") !== "false";
+    if (soundOn) {
+      audio.currentTime = 0;
+      audio.play().catch(e => console.log("SFX play blocked"));
+    }
+  };
+
+  useEffect(() => {
+    const handleToggle = (e) => {
+      setIsPaused(e.detail.isOpen);
+    };
+    window.addEventListener("help_overlay_toggle", handleToggle);
+    return () => window.removeEventListener("help_overlay_toggle", handleToggle);
+  }, []);
 
   const loadQuestion = async () => {
     try {
@@ -38,9 +61,10 @@ function Game() {
   }, []);
 
   useEffect(() => {
-    if (lives <= 0) return;
+    if (lives <= 0 || isPaused) return;
 
     if (timeLeft === 0) {
+      playSfx(wrongSfx);
       setLives((prev) => prev - 1);
       setMsg("⏰ Time up! Loading next...");
       loadQuestion();
@@ -52,7 +76,7 @@ function Game() {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [timeLeft, lives]);
+  }, [timeLeft, lives, isPaused]);
 
   useEffect(() => {
     if (lives <= 0) {
@@ -82,6 +106,7 @@ function Game() {
         console.error("Failed to update high score", e);
       }
     }
+    playSfx(gameOverSfx);
   };
 
   const submit = () => {
@@ -91,13 +116,23 @@ function Game() {
     const userAns = Number(answer);
 
     if (userAns === solution) {
+      playSfx(correctSfx);
+      setFeedbackOverlay("correct");
       setScore((prev) => prev + 10);
       setMsg("✅ Correct! Loading next...");
-      loadQuestion();
+      setTimeout(() => {
+        setFeedbackOverlay(null);
+        loadQuestion();
+      }, 1500);
     } else {
+      playSfx(wrongSfx);
+      setFeedbackOverlay("wrong");
       setLives((prev) => prev - 1);
       setMsg("❌ Wrong! Loading next...");
-      loadQuestion();
+      setTimeout(() => {
+        setFeedbackOverlay(null);
+        loadQuestion();
+      }, 1500);
     }
   };
 
@@ -111,6 +146,31 @@ function Game() {
 
   return (
     <div className="page">
+      {feedbackOverlay && (
+        <div className={`feedback-popup-wrap ${feedbackOverlay}`}>
+          <div className="feedback-popup-content">
+            <div className="monkey-svg-container">
+              <svg viewBox="0 0 100 100" className="monkey-animated-svg">
+                {/* Monkey face */}
+                <circle cx="50" cy="50" r="40" fill="#8B4513" />
+                <circle cx="15" cy="40" r="12" fill="#8B4513" />
+                <circle cx="85" cy="40" r="12" fill="#8B4513" />
+                <ellipse cx="50" cy="62" rx="30" ry="20" fill="#F3E5AB" />
+                <circle cx="38" cy="48" r="4" fill="black" />
+                <circle cx="62" cy="48" r="4" fill="black" />
+                <path d="M40 75 Q50 82 60 75" stroke="black" strokeWidth="2" fill="none" className="monkey-mouth-path" />
+                {feedbackOverlay === "correct" && (
+                  <path d="M70 20 Q80 20 85 35 Q80 40 70 35 Q65 30 70 20" fill="#FFE135" className="falling-banana-svg" />
+                )}
+              </svg>
+            </div>
+            <div className="feedback-info">
+              <span className="feedback-badge">{feedbackOverlay === "correct" ? "EXCELLENT" : "OOPS!"}</span>
+              <h3>{feedbackOverlay === "correct" ? "Very GOOD! 🍌" : "Wrong Answer! 😢"}</h3>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="game-wrap">
 
         <div className="game-board">
