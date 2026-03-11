@@ -22,7 +22,7 @@ const IntroVideo = ({ onVideoEnd }) => {
     const playVideo = async () => {
       try {
         await video.play();
-        
+
         // Now try to unmute. Browsers might block this, but we'll try silently.
         try {
           video.muted = false;
@@ -36,7 +36,7 @@ const IntroVideo = ({ onVideoEnd }) => {
         // Fallback for extreme cases
         video.muted = true;
         setIsMuted(true);
-        video.play().catch(() => {}); 
+        video.play().catch(() => { });
       }
     };
 
@@ -74,7 +74,7 @@ const IntroVideo = ({ onVideoEnd }) => {
     setIsFading(true);
     // Remember that it has played in this session
     sessionStorage.setItem("introPlayed", "true");
-    
+
     // Wait for the fade animation to complete before calling onVideoEnd
     setTimeout(() => {
       onVideoEnd();
@@ -94,7 +94,7 @@ const IntroVideo = ({ onVideoEnd }) => {
         <source src={videoSrc} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      
+
       <div className="controls-overlay">
         <button className="icon-btn mute-btn" onClick={toggleMute} title={isMuted ? "Unmute" : "Mute"}>
           {isMuted ? (
@@ -107,7 +107,7 @@ const IntroVideo = ({ onVideoEnd }) => {
             </svg>
           )}
         </button>
-        
+
         <button className="skip-btn" onClick={handleSkipOrEnd}>
           Skip Intro
         </button>

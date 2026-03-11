@@ -43,45 +43,45 @@ function App() {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/verify-otp" element={<VerifyOTP />} />
               <Route path="/reset-password" element={<ResetPassword />} />
-              <Route 
-                path="/selection" 
+              <Route
+                path="/selection"
                 element={
                   <ProtectedRoute>
                     <GameSelection />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/game/:difficulty" 
+              <Route
+                path="/game/:difficulty"
                 element={
                   <ProtectedRoute>
                     <Game />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/activity" 
+              <Route
+                path="/activity"
                 element={
                   <ProtectedRoute>
                     <UserActivity />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/profile" 
+              <Route
+                path="/profile"
                 element={
                   <ProtectedRoute>
                     <Profile />
                   </ProtectedRoute>
-                } 
+                }
               />
-              <Route 
-                path="/leaderboard" 
+              <Route
+                path="/leaderboard"
                 element={
                   <ProtectedRoute>
                     <Leaderboard />
                   </ProtectedRoute>
-                } 
+                }
               />
             </Routes>
           </div>
@@ -92,5 +92,3 @@ function App() {
 }
 
 export default App;
-
-

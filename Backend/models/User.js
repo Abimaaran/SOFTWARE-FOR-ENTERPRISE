@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // later store hashed password
     highScoreEasy: { type: Number, default: 0 },
+    highScoreMedium: { type: Number, default: 0 },
     highScoreHard: { type: Number, default: 0 },
     resetOTP: { type: String },
     resetOTPExpires: { type: Date },

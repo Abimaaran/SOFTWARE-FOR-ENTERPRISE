@@ -6,6 +6,26 @@ import "./Game.css";
 function Game() {
   const { difficulty } = useParams();
   const isHard = difficulty === "hard";
+  const isMedium = difficulty === "medium";
+  const isEasy = difficulty === "easy";
+
+  const getInitialLives = () => {
+    if (isHard) return 2;
+    if (isMedium) return 3;
+    return 5; // Easy
+  };
+
+  const getInitialTime = () => {
+    if (isHard) return 20;
+    if (isMedium) return 50;
+    return 999; // Placeholder for Easy (timer will be ignored)
+  };
+
+  const getHighScoreKey = () => {
+    if (isHard) return "highScoreHard";
+    if (isMedium) return "highScoreMedium";
+    return "highScoreEasy";
+  };
 
   const [imgUrl, setImgUrl] = useState("");
   const [solution, setSolution] = useState(null);
@@ -13,17 +33,17 @@ function Game() {
   const [msg, setMsg] = useState("Quest is ready.");
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(
-    Number(localStorage.getItem(isHard ? "highScoreHard" : "highScoreEasy")) || 0
+    Number(localStorage.getItem(getHighScoreKey())) || 0
   );
-  const [lives, setLives] = useState(isHard ? 2 : 3);
-  const [timeLeft, setTimeLeft] = useState(isHard ? 20 : 60);
+  const [lives, setLives] = useState(getInitialLives());
+  const [timeLeft, setTimeLeft] = useState(getInitialTime());
   const [isPaused, setIsPaused] = useState(false);
   const [feedbackOverlay, setFeedbackOverlay] = useState(null); // 'correct' or 'wrong'
 
   // Audio References
-  const [correctSfx] = useState(new Audio("https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3")); // Clapping/Applause
-  const [wrongSfx] = useState(new Audio("https://cdn.pixabay.com/audio/2022/03/24/audio_333068e4c7.mp3")); // "Awww" / Disappointment sound
-  const [gameOverSfx] = useState(new Audio("https://assets.mixkit.co/active_storage/sfx/2689/2689-preview.mp3"));
+  const [correctSfx] = useState(new Audio("/sound/correct.wav")); // Clapping/Applause
+  const [wrongSfx] = useState(new Audio("/sound/wrong.wav")); // "Awww" / Disappointment sound
+  const [gameOverSfx] = useState(new Audio("/sound/gameover.wav"));
 
   const playSfx = (audio) => {
     const soundOn = localStorage.getItem("soundOn") !== "false";
@@ -45,7 +65,7 @@ function Game() {
     try {
       setMsg("Loading...");
       setAnswer("");
-      setTimeLeft(isHard ? 20 : 60);
+      setTimeLeft(getInitialTime());
 
       const res = await axios.get("http://localhost:5000/banana/question");
       setImgUrl(res.data.question);
@@ -61,7 +81,7 @@ function Game() {
   }, []);
 
   useEffect(() => {
-    if (lives <= 0 || isPaused) return;
+    if (lives <= 0 || isPaused || isEasy) return;
 
     if (timeLeft === 0) {
       playSfx(wrongSfx);
@@ -76,7 +96,7 @@ function Game() {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [timeLeft, lives, isPaused]);
+  }, [timeLeft, lives, isPaused, isEasy]);
 
   useEffect(() => {
     if (lives <= 0) {
@@ -95,12 +115,11 @@ function Game() {
         );
         const newHighScore = res.data.highScore;
         setHighScore(newHighScore);
-        
+
         // Update local storage for the specific difficulty
-        const storageKey = isHard ? "highScoreHard" : "highScoreEasy";
-        localStorage.setItem(storageKey, newHighScore);
+        localStorage.setItem(getHighScoreKey(), newHighScore);
         localStorage.setItem("highScore", newHighScore); // backward compatibility
-        
+
         setMsg("🏆 New High Score!");
       } catch (e) {
         console.error("Failed to update high score", e);
@@ -138,8 +157,8 @@ function Game() {
 
   const restart = () => {
     setScore(0);
-    setLives(isHard ? 2 : 3);
-    setTimeLeft(isHard ? 20 : 60);
+    setLives(getInitialLives());
+    setTimeLeft(getInitialTime());
     setMsg("Quest is ready.");
     loadQuestion();
   };
@@ -187,7 +206,9 @@ function Game() {
           <span>Score: {score}</span>
           <span>High Score: {highScore}</span>
           <span>Lives: {lives}</span>
-          <span className={timeLeft <= 10 ? 'timer-warning' : ''}>Time: {timeLeft}s</span>
+          {!isEasy && (
+            <span className={timeLeft <= 10 ? 'timer-warning' : ''}>Time: {timeLeft}s</span>
+          )}
         </div>
 
         {lives <= 0 ? (

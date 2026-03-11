@@ -21,7 +21,7 @@
 
 .activity-page::-webkit-scrollbar-thumb {
   background: #f9d71c;
-  border: 3px solid #8B4513; 
+  border: 3px solid #8B4513;
   border-radius: 10px;
 }
 
@@ -34,7 +34,7 @@
   background: rgba(255, 255, 255, 0.9);
   padding: 50px;
   border-radius: 40px;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
   width: 100%;
   max-width: 800px;
   backdrop-filter: blur(20px);
@@ -43,8 +43,15 @@
 }
 
 @keyframes slideUpFade {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .activity-header {
@@ -62,7 +69,7 @@
   justify-content: center;
   border-radius: 50%;
   margin: 0 auto 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   border: 4px solid #f9d71c;
 }
 
@@ -88,6 +95,10 @@
   margin-bottom: 50px;
 }
 
+.stats-grid.three-col {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
 .premium-card {
   position: relative;
   overflow: hidden;
@@ -95,13 +106,13 @@
   border-radius: 25px;
   border: none;
   background: white;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .premium-card:hover {
   transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 25px 45px rgba(0,0,0,0.1);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
 }
 
 .card-badge {
@@ -115,8 +126,20 @@
   letter-spacing: 1px;
 }
 
-.easy .card-badge { background: #fdf2b1; color: #8B4513; }
-.hard .card-badge { background: #fee2e2; color: #ef4444; }
+.easy .card-badge {
+  background: #fdf2b1;
+  color: #8B4513;
+}
+
+.medium .card-badge {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.hard .card-badge {
+  background: #fee2e2;
+  color: #ef4444;
+}
 
 .stat-icon {
   font-size: 3.5rem;
@@ -133,7 +156,7 @@
 }
 
 .stat-value {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 900;
   color: #2D1B08;
   margin-bottom: 5px;
@@ -147,21 +170,61 @@
 }
 
 .achievement-section {
-  background: rgba(249, 215, 28, 0.08);
-  padding: 30px;
-  border-radius: 20px;
-  border: 1px dashed #f9d71c;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 40px;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
   margin-bottom: 50px;
 }
 
 .achievement-section h3 {
-  color: #8B4513;
-  margin-bottom: 10px;
+  color: #2D1B08;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+  text-align: center;
 }
 
-.achievement-section p {
+.achievements-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.achievement-badge {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s;
+}
+
+.achievement-badge.locked {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.achievement-badge.unlocked {
+  border: 2px solid #f9d71c;
+  background: linear-gradient(to right, #fff, #fffde7);
+}
+
+.badge-icon {
+  font-size: 2.5rem;
+}
+
+.badge-details h4 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+  color: #2D1B08;
+}
+
+.badge-details p {
+  font-size: 0.85rem;
   color: #6B4F4F;
-  font-size: 0.95rem;
+  margin: 0;
 }
 
 .activity-footer {
@@ -205,9 +268,22 @@
   transform: scale(1.2) rotate(15deg);
 }
 
-@media (max-width: 650px) {
-  .stats-grid {
+@media (max-width: 850px) {
+  .stats-grid.three-col {
     grid-template-columns: 1fr;
   }
-  .activity-title { font-size: 2rem; }
+
+  .achievements-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 650px) {
+  .activity-title {
+    font-size: 2rem;
+  }
+
+  .activity-wrap {
+    padding: 30px 20px;
+  }
 }
