@@ -79,53 +79,97 @@
 .leaderboard-list {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 12px;
 }
 
 .leaderboard-header {
   display: grid;
-  grid-template-columns: 80px 1fr 120px;
-  font-weight: bold;
-  padding: 1rem;
+  grid-template-columns: 100px 1fr 140px;
+  font-weight: 800;
+  padding: 1.2rem;
   background: #fdf2b1;
-  border-radius: 1rem;
-  color: #5c4033;
+  border-radius: 1.5rem;
+  color: #2D1B08;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
 }
 
 .leaderboard-item {
   display: grid;
-  grid-template-columns: 80px 1fr 120px;
-  padding: 1rem;
+  grid-template-columns: 100px 1fr 140px;
+  padding: 1.2rem;
   background: white;
-  border-radius: 1rem;
-  transition: transform 0.2s;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   align-items: center;
+  border: 1px solid transparent;
 }
 
 .leaderboard-item:hover {
-  transform: scale(1.02);
-  background: #fff9db;
+  transform: translateX(10px);
+  background: #fff;
+  border-color: #f9d71c;
+  box-shadow: 0 10px 25px rgba(249, 215, 28, 0.15);
 }
 
-.rank {
-  font-weight: bold;
-  color: #f9d71c;
-  font-size: 1.2rem;
+/* Rank Medals & Colors */
+.rank-badge {
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: #888;
 }
+
+.gold-rank {
+  background: linear-gradient(to right, #ffffff, #fffdf0);
+  border: 2px solid #FFD700;
+  box-shadow: 0 5px 20px rgba(255, 215, 0, 0.1);
+}
+.gold-rank .rank-badge { font-size: 2rem; }
+.gold-rank .username { font-weight: 800; color: #8B4513; }
+
+.silver-rank {
+  background: linear-gradient(to right, #ffffff, #f8f9fa);
+  border: 2px solid #C0C0C0;
+}
+.silver-rank .rank-badge { font-size: 1.8rem; }
+
+.bronze-rank {
+  background: linear-gradient(to right, #ffffff, #fffafa);
+  border: 2px solid #CD7F32;
+}
+.bronze-rank .rank-badge { font-size: 1.6rem; }
 
 .username {
   text-align: left;
   padding-left: 1rem;
-  color: #333;
+  color: #2D1B08;
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
 .score {
-  font-weight: bold;
-  color: #5c4033;
+  font-weight: 900;
+  color: #8B4513;
+  font-size: 1.3rem;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .error-msg {
   color: #ff4d4d;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+@media (max-width: 650px) {
+  .leaderboard-wrap {
+    padding: 1.5rem;
+    margin: 20px;
+  }
+  .leaderboard-title { font-size: 2rem; }
+  .leaderboard-header, .leaderboard-item {
+    grid-template-columns: 60px 1fr 100px;
+    padding: 1rem 0.5rem;
+  }
 }

@@ -31,6 +31,7 @@ router.post("/register", async (req, res) => {
       message: "Registered", 
       userId: user._id,
       highScoreEasy: user.highScoreEasy,
+      highScoreMedium: user.highScoreMedium,
       highScoreHard: user.highScoreHard 
     });
   } catch (e) {
@@ -69,6 +70,7 @@ router.post("/login", async (req, res) => {
       username: user.username,
       email: user.email,
       highScoreEasy: user.highScoreEasy,
+      highScoreMedium: user.highScoreMedium,
       highScoreHard: user.highScoreHard
     });
   } catch (e) {
@@ -93,7 +95,8 @@ router.put("/highscore", authMiddleware, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const field = difficulty === "hard" ? "highScoreHard" : "highScoreEasy";
+    const field = difficulty === "hard" ? "highScoreHard" : 
+                  difficulty === "medium" ? "highScoreMedium" : "highScoreEasy";
 
     if (score > user[field]) {
       user[field] = score;
@@ -152,7 +155,8 @@ router.put("/update-profile", authMiddleware, async (req, res) => {
 router.get("/leaderboard", authMiddleware, async (req, res) => {
   try {
     const { difficulty } = req.query;
-    const field = difficulty === "hard" ? "highScoreHard" : "highScoreEasy";
+    const field = difficulty === "hard" ? "highScoreHard" : 
+                  difficulty === "medium" ? "highScoreMedium" : "highScoreEasy";
 
     const topPlayers = await User.find({}, `username ${field}`)
       .sort({ [field]: -1 })

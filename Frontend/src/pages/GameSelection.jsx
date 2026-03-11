@@ -18,19 +18,26 @@ function GameSelection() {
         </h1>
         <p className="selection-subtitle">How ripe are your skills?</p>
 
-        <div className="selection-options">
+        <div className="selection-grid">
           <button className="selection-card easy" onClick={() => selectMode("easy")}>
             <div className="card-icon">🍌</div>
-            <h2>Easy Mode</h2>
-            <p>60s timer • 3 Lives</p>
-            <span className="play-hint">Select</span>
+            <h2>Easy </h2>
+            <p>No timer • 5 Lives</p>
+            <span className="play-hint">Beginner</span>
+          </button>
+
+          <button className="selection-card medium" onClick={() => selectMode("medium")}>
+            <div className="card-icon">🐒</div>
+            <h2>Medium </h2>
+            <p>50s timer • 3 Lives</p>
+            <span className="play-hint">Skilled</span>
           </button>
 
           <button className="selection-card hard" onClick={() => selectMode("hard")}>
-            <div className="card-icon">🔥</div>
-            <h2>Hard Mode</h2>
+            <div className="card-icon">🦍</div>
+            <h2>Hard </h2>
             <p>20s timer • 2 Lives</p>
-            <span className="play-hint">Select</span>
+            <span className="play-hint">Pro</span>
           </button>
         </div>
       </div>

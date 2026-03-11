@@ -41,21 +41,21 @@ function Navbar() {
     <>
       <nav className="navbar">
         <div className="nav-brand">
-          <Link to="/selection">🍌 Banana Game</Link>
+          <Link to="/selection">🍌 Banana Quiz </Link>
         </div>
         <div className="nav-links">
           <Link to="/selection" className="nav-item">Play</Link>
           <button className="nav-item help-btn" onClick={() => toggleHelp(true)}>Help</button>
-          
+
           <div className="profile-menu" ref={dropdownRef}>
-            <button 
-              className="profile-icon" 
+            <button
+              className="profile-icon"
               onClick={() => setDropdownOpen(!dropdownOpen)}
               title="Profile"
             >
               👤
             </button>
-            
+
             {dropdownOpen && (
               <div className="dropdown-menu">
                 <Link to="/activity" className="dropdown-item" onClick={() => setDropdownOpen(false)}>User Activity</Link>
@@ -75,7 +75,7 @@ function Navbar() {
             <div className="help-content">
               <div className="help-step">
                 <span className="step-num">1</span>
-                <p>Choose your difficulty: <strong>Easy</strong> (60s, 3 lives) or <strong>Hard</strong> (20s, 2 lives).</p>
+                <p>Choose your difficulty: <strong>Easy</strong> (No timer, 5 lives), <strong>Medium</strong> (50s, 3 lives) or <strong>Hard</strong> (20s, 2 lives).</p>
               </div>
               <div className="help-step">
                 <span className="step-num">2</span>

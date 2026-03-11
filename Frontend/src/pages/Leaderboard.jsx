@@ -42,10 +42,16 @@ function Leaderboard() {
             🍌 Easy
           </button>
           <button 
+            className={`diff-btn ${difficulty === 'medium' ? 'active' : ''}`}
+            onClick={() => setDifficulty('medium')}
+          >
+            🐒 Medium
+          </button>
+          <button 
             className={`diff-btn ${difficulty === 'hard' ? 'active' : ''}`}
             onClick={() => setDifficulty('hard')}
           >
-            🔥 Hard
+            🦍 Hard
           </button>
         </div>
 
@@ -56,13 +62,22 @@ function Leaderboard() {
             <span>Player</span>
             <span>High Score</span>
           </div>
-          {players.map((player, index) => (
-            <div key={player._id} className="leaderboard-item">
-              <span className="rank">{index + 1}</span>
-              <span className="username">{player.username}</span>
-              <span className="score">{player.highScore}</span>
-            </div>
-          ))}
+          {players.map((player, index) => {
+            const rank = index + 1;
+            const rankEmoji = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : rank;
+            let rankClass = "";
+            if (rank === 1) rankClass = "gold-rank";
+            else if (rank === 2) rankClass = "silver-rank";
+            else if (rank === 3) rankClass = "bronze-rank";
+
+            return (
+              <div key={player._id} className={`leaderboard-item ${rankClass}`}>
+                <span className="rank-badge">{rankEmoji}</span>
+                <span className="username">{player.username}</span>
+                <span className="score">{player.highScore}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
