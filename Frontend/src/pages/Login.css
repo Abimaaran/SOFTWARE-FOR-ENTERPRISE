@@ -10,7 +10,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   min-height: 100vh;
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -34,9 +35,17 @@ body {
 
 /* ===== Animated Background Elements ===== */
 @keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Floating Bananas Animation */
@@ -50,8 +59,15 @@ body {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(10deg); }
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(10deg);
+  }
 }
 
 .banana-1 {
@@ -109,12 +125,15 @@ body {
     transform: translateY(-100px) rotate(0deg);
     opacity: 0;
   }
+
   10% {
     opacity: 0.3;
   }
+
   90% {
     opacity: 0.3;
   }
+
   100% {
     transform: translateY(100vh) rotate(360deg);
     opacity: 0;
@@ -155,8 +174,17 @@ body {
 }
 
 @keyframes twinkle {
-  0%, 100% { opacity: 0.2; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.2); }
+
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2);
+  }
 }
 
 .star-1 {
@@ -196,8 +224,15 @@ body {
 }
 
 @keyframes containerGlow {
-  0%, 100% { box-shadow: 0 30px 60px -15px rgba(255, 140, 0, 0.4); }
-  50% { box-shadow: 0 30px 70px -10px rgba(255, 140, 0, 0.7); }
+
+  0%,
+  100% {
+    box-shadow: 0 30px 60px -15px rgba(255, 140, 0, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 30px 70px -10px rgba(255, 140, 0, 0.7);
+  }
 }
 
 @keyframes slideUp {
@@ -205,6 +240,7 @@ body {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -241,8 +277,13 @@ body {
 }
 
 @keyframes spinBananas {
-  from { transform: translateX(-50%) rotate(0deg); }
-  to { transform: translateX(-50%) rotate(360deg); }
+  from {
+    transform: translateX(-50%) rotate(0deg);
+  }
+
+  to {
+    transform: translateX(-50%) rotate(360deg);
+  }
 }
 
 /* ===== Title - CHANGED: Removed "Banana Quiz App" and centered ===== */
@@ -266,8 +307,15 @@ body {
 }
 
 @keyframes titlePulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
 }
 
 .login-title span {
@@ -285,9 +333,19 @@ body {
 }
 
 @keyframes rotate {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-15deg); }
-  75% { transform: rotate(15deg); }
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-15deg);
+  }
+
+  75% {
+    transform: rotate(15deg);
+  }
 }
 
 /* Removed the old before/after pseudo-elements and added new subtitle */
@@ -304,8 +362,15 @@ body {
 }
 
 @keyframes fadeInOut {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* ===== Form Container ===== */
@@ -338,6 +403,7 @@ body {
     opacity: 0;
     transform: translateX(20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -361,8 +427,15 @@ body {
 }
 
 @keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
 }
 
 /* ===== Input Fields ===== */
@@ -395,8 +468,15 @@ body {
 }
 
 @keyframes inputPulse {
-  0%, 100% { border-color: #FFA500; }
-  50% { border-color: #FFD700; }
+
+  0%,
+  100% {
+    border-color: #FFA500;
+  }
+
+  50% {
+    border-color: #FFD700;
+  }
 }
 
 .login-input::placeholder {
@@ -427,9 +507,19 @@ body {
 }
 
 @keyframes eyeWiggle {
-  0%, 100% { transform: translateY(-50%) rotate(0deg); }
-  25% { transform: translateY(-50%) rotate(-5deg); }
-  75% { transform: translateY(-50%) rotate(5deg); }
+
+  0%,
+  100% {
+    transform: translateY(-50%) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-50%) rotate(-5deg);
+  }
+
+  75% {
+    transform: translateY(-50%) rotate(5deg);
+  }
 }
 
 .password-toggle:hover {
@@ -447,35 +537,41 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
-.forgot-password a {
+.forgot-password .link {
   color: #FFA500;
   text-decoration: none;
   font-size: 13px;
   font-weight: 600;
   transition: all 0.3s ease;
   position: relative;
+  cursor: pointer;
 }
 
-.forgot-password a::after {
+.forgot-password .link::after {
   content: '';
   position: absolute;
   bottom: -2px;
   left: 0;
   width: 0;
   height: 2px;
-  background: #FFA500;
+  background: #007bff;
   transition: width 0.3s ease;
 }
 
-.forgot-password a:hover {
-  color: #FF8C00;
+.forgot-password .link:hover {
+  color: #007bff;
 }
 
-.forgot-password a:hover::after {
+.forgot-password .link:hover::after {
   width: 100%;
 }
 
@@ -505,8 +601,15 @@ body {
 }
 
 @keyframes buttonPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
 }
 
 .login-btn::before {
@@ -570,8 +673,13 @@ body {
 }
 
 @keyframes lineExpand {
-  from { width: 0; }
-  to { width: 100%; }
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
 }
 
 .divider span {
@@ -650,8 +758,17 @@ body {
 }
 
 @keyframes sparkle {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.7; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
 }
 
 .signup-btn:active {
@@ -675,6 +792,7 @@ body {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -682,8 +800,15 @@ body {
 }
 
 @keyframes alertPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.01); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.01);
+  }
 }
 
 .alert-success {
@@ -716,24 +841,24 @@ body {
     max-width: 400px;
     padding: 30px 25px;
   }
-  
+
   .login-title {
     font-size: 36px;
     gap: 12px;
   }
-  
+
   .login-title span {
     font-size: 40px;
   }
-  
+
   .login-subtitle {
     font-size: 14px;
   }
-  
+
   .login-input {
     height: 48px;
   }
-  
+
   .login-btn {
     height: 52px;
     font-size: 18px;
@@ -745,31 +870,31 @@ body {
     max-width: 350px;
     padding: 25px 20px;
   }
-  
+
   .login-title {
     font-size: 32px;
     gap: 10px;
     margin-bottom: 20px;
   }
-  
+
   .login-title span {
     font-size: 36px;
   }
-  
+
   .login-subtitle {
     font-size: 13px;
   }
-  
+
   .login-input {
     height: 45px;
     font-size: 15px;
   }
-  
+
   .login-btn {
     height: 48px;
     font-size: 16px;
   }
-  
+
   .signup-btn {
     height: 45px;
     font-size: 15px;
@@ -778,41 +903,44 @@ body {
 
 /* ===== Landscape Mode ===== */
 @media (max-height: 600px) and (orientation: landscape) {
+
   /* Make sure your component containers don't have positioning conflicts */
-.login-wrap {
-  /* Your existing styles - these won't be affected by App.css */
-  position: relative; /* Not absolute/fixed */
-  margin: 0 auto;
-  /* ... rest of your styles */
-}
+  .login-wrap {
+    /* Your existing styles - these won't be affected by App.css */
+    position: relative;
+    /* Not absolute/fixed */
+    margin: 0 auto;
+    /* ... rest of your styles */
+  }
+
   .login-title {
     font-size: 28px;
     margin-bottom: 15px;
     gap: 8px;
   }
-  
+
   .login-title span {
     font-size: 32px;
   }
-  
+
   .login-subtitle {
     font-size: 12px;
   }
-  
+
   .login-form {
     gap: 12px;
   }
-  
+
   .login-input {
     height: 42px;
   }
-  
+
   .login-btn {
     height: 45px;
     font-size: 16px;
     margin-top: 5px;
   }
-  
+
   .signup-btn {
     height: 42px;
   }
