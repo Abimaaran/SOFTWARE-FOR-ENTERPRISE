@@ -171,4 +171,83 @@ router.get("/leaderboard", authMiddleware, async (req, res) => {
   }
 });
 
-module.exports = router;
+// FORGOT PASSWORD - GENERATE OTP
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: "Email required" });
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    // Store in DB (Valid for 15 mins)
+    user.resetOTP = otp;
+    user.resetOTPExpires = Date.now() + 15 * 60 * 1000;
+    await user.save();
+
+    // Return the plain OTP to the frontend (to be sent via EmailJS)
+    res.json({ message: "OTP generated", otp, email: user.email });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+// VERIFY OTP
+router.post("/verify-otp", async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) return res.status(400).json({ message: "Email and OTP required" });
+
+    const user = await User.findOne({ 
+      email, 
+      resetOTP: otp, 
+      resetOTPExpires: { $gt: Date.now() } 
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    res.json({ message: "OTP verified" });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+// RESET PASSWORD
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    const user = await User.findOne({ 
+      email, 
+      resetOTP: otp, 
+      resetOTPExpires: { $gt: Date.now() } 
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Session expired, please try again" });
+    }
+
+    // Hash new password
+    const hash = await bcrypt.hash(newPassword, 10);
+    user.password = hash;
+    
+    // Clear OTP fields
+    user.resetOTP = undefined;
+    user.resetOTPExpires = undefined;
+    await user.save();
+
+    res.json({ message: "Password updated successfully" });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+module.exports = router;
