@@ -38,6 +38,10 @@ function Login() {
       localStorage.setItem("highScoreHard", highScoreHard);
       localStorage.setItem("username", res.data.username);
       localStorage.setItem("email", res.data.email);
+      localStorage.setItem("bananaCount", res.data.bananaCount);
+      localStorage.setItem("timeBreakPowers", res.data.timeBreakPowers);
+      localStorage.setItem("extraLifePowers", res.data.extraLifePowers);
+      localStorage.setItem("doubleScorePowers", res.data.doubleScorePowers);
 
       setAlert({
         show: true,

@@ -39,6 +39,97 @@ function Game() {
   const [timeLeft, setTimeLeft] = useState(getInitialTime());
   const [isPaused, setIsPaused] = useState(false);
   const [feedbackOverlay, setFeedbackOverlay] = useState(null); // 'correct' or 'wrong'
+  const [bananaCount, setBananaCount] = useState(
+    Number(localStorage.getItem("bananaCount")) || 20
+  );
+  const [consecutiveWins, setConsecutiveWins] = useState(0);
+
+  // Power-up States
+  const [isTimeBreakActive, setIsTimeBreakActive] = useState(false);
+  const [isDoubleScoreActive, setIsDoubleScoreActive] = useState(false);
+  const [timeBreakCooldown, setTimeBreakCooldown] = useState(false);
+  const [extraLifeCooldown, setExtraLifeCooldown] = useState(false);
+  const [doubleScoreCooldown, setDoubleScoreCooldown] = useState(false);
+
+  // Per-power inventory counts
+  const [timeBreakPowers, setTimeBreakPowers] = useState(
+    Number(localStorage.getItem("timeBreakPowers")) || 1
+  );
+  const [extraLifePowers, setExtraLifePowers] = useState(
+    Number(localStorage.getItem("extraLifePowers")) || 1
+  );
+  const [doubleScorePowers, setDoubleScorePowers] = useState(
+    Number(localStorage.getItem("doubleScorePowers")) || 1
+  );
+
+  // Listen for shop purchase events to update power counts live
+  useEffect(() => {
+    const handleShopUpdate = () => {
+      setTimeBreakPowers(Number(localStorage.getItem("timeBreakPowers")) || 0);
+      setExtraLifePowers(Number(localStorage.getItem("extraLifePowers")) || 0);
+      setDoubleScorePowers(Number(localStorage.getItem("doubleScorePowers")) || 0);
+      setBananaCount(Number(localStorage.getItem("bananaCount")) || 0);
+    };
+    window.addEventListener("shop_purchase", handleShopUpdate);
+    return () => window.removeEventListener("shop_purchase", handleShopUpdate);
+  }, []);
+
+  // Sync localStorage with DB on mount
+  useEffect(() => {
+    const syncFromDB = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        const res = await axios.get("http://localhost:5000/auth/me", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const d = res.data;
+        localStorage.setItem("bananaCount", d.bananaCount);
+        localStorage.setItem("timeBreakPowers", d.timeBreakPowers);
+        localStorage.setItem("extraLifePowers", d.extraLifePowers);
+        localStorage.setItem("doubleScorePowers", d.doubleScorePowers);
+        localStorage.setItem("highScoreEasy", d.highScoreEasy);
+        localStorage.setItem("highScoreMedium", d.highScoreMedium);
+        localStorage.setItem("highScoreHard", d.highScoreHard);
+        setBananaCount(d.bananaCount);
+        setTimeBreakPowers(d.timeBreakPowers);
+        setExtraLifePowers(d.extraLifePowers);
+        setDoubleScorePowers(d.doubleScorePowers);
+        setHighScore(d[getHighScoreKey()] || 0);
+      } catch (err) {
+        console.error("Failed to sync from DB", err);
+      }
+    };
+    syncFromDB();
+  }, []);
+
+  const updateBananasInDB = async (amount) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      await axios.put(
+        "http://localhost:5000/auth/update-bananas",
+        { amount },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (error) {
+      console.error("Failed to update bananas", error);
+    }
+  };
+
+  const usePowerInDB = async (powerType) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      await axios.put(
+        "http://localhost:5000/auth/use-power",
+        { powerType },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (error) {
+      console.error("Failed to use power", error);
+    }
+  };
 
   // Audio References
   const [correctSfx] = useState(new Audio("/sound/correct.wav")); // Clapping/Applause
@@ -67,6 +158,12 @@ function Game() {
       setAnswer("");
       setTimeLeft(getInitialTime());
 
+      // Reset powerup effects and cooldowns for the next question so time is normal
+      setIsTimeBreakActive(false);
+      setTimeBreakCooldown(false);
+      setExtraLifeCooldown(false);
+      setDoubleScoreCooldown(false);
+
       const res = await axios.get("http://localhost:5000/banana/question");
       setImgUrl(res.data.question);
       setSolution(res.data.solution);
@@ -81,13 +178,27 @@ function Game() {
   }, []);
 
   useEffect(() => {
-    if (lives <= 0 || isPaused || isEasy) return;
+    if (lives <= 0 || isPaused || isEasy || isTimeBreakActive) return;
 
     if (timeLeft === 0) {
       playSfx(wrongSfx);
-      setLives((prev) => prev - 1);
-      setMsg("⏰ Time up! Loading next...");
-      loadQuestion();
+      setFeedbackOverlay("timeup");
+      setConsecutiveWins(0);
+      setMsg("⏰ Time up!...");
+
+      setTimeout(() => {
+        const newLives = lives - 1;
+        setLives(newLives);
+
+        if (newLives <= 0) {
+          setFeedbackOverlay("gameover");
+          handleGameOver();
+        } else {
+          setFeedbackOverlay(null);
+          loadQuestion();
+        }
+      }, 1500);
+
       return;
     }
 
@@ -96,13 +207,9 @@ function Game() {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [timeLeft, lives, isPaused, isEasy]);
+  }, [timeLeft, lives, isPaused, isEasy, isTimeBreakActive]);
 
-  useEffect(() => {
-    if (lives <= 0) {
-      handleGameOver();
-    }
-  }, [lives]);
+  // Removed useEffect for lives <= 0, handled explicitly in timers
 
   const handleGameOver = async () => {
     if (score > highScore) {
@@ -137,8 +244,28 @@ function Game() {
     if (userAns === solution) {
       playSfx(correctSfx);
       setFeedbackOverlay("correct");
-      setScore((prev) => prev + 10);
-      setMsg("✅ Correct! Loading next...");
+
+      const pointsEarned = isDoubleScoreActive ? 20 : 10;
+      setScore((prev) => prev + pointsEarned);
+      if (isDoubleScoreActive) {
+        setIsDoubleScoreActive(false);
+      }
+
+      const newStreak = consecutiveWins + 1;
+      if (newStreak === 3) {
+        setConsecutiveWins(0);
+        setBananaCount((prev) => {
+          const newCount = prev + 20;
+          localStorage.setItem("bananaCount", newCount);
+          return newCount;
+        });
+        setMsg("🔥 X3 Combo! Bananas Increased! Loading next...");
+        updateBananasInDB(20);
+      } else {
+        setConsecutiveWins(newStreak);
+        setMsg("✅ Correct! Loading next...");
+      }
+
       setTimeout(() => {
         setFeedbackOverlay(null);
         loadQuestion();
@@ -146,19 +273,67 @@ function Game() {
     } else {
       playSfx(wrongSfx);
       setFeedbackOverlay("wrong");
-      setLives((prev) => prev - 1);
-      setMsg("❌ Wrong! Loading next...");
+      setConsecutiveWins(0);
+      setMsg("❌ Wrong!...");
+
       setTimeout(() => {
-        setFeedbackOverlay(null);
-        loadQuestion();
+        const newLives = lives - 1;
+        setLives(newLives);
+
+        if (newLives <= 0) {
+          setFeedbackOverlay("gameover");
+          handleGameOver();
+        } else {
+          setFeedbackOverlay(null);
+          loadQuestion();
+        }
       }, 1500);
     }
+  };
+
+  const handleTimeBreak = () => {
+    if (timeBreakCooldown || isPaused || isTimeBreakActive || timeBreakPowers <= 0) return;
+    setTimeBreakPowers((prev) => { const n = prev - 1; localStorage.setItem("timeBreakPowers", n); return n; });
+    usePowerInDB("timeBreak");
+    setIsTimeBreakActive(true);
+    setTimeBreakCooldown(true);
+    setMsg("⏳ Time Break Activated! (5s)");
+    setTimeout(() => {
+      setIsTimeBreakActive(false);
+      setMsg("Quest is ready.");
+    }, 5000);
+  };
+
+  const handleExtraLife = () => {
+    if (extraLifeCooldown || lives <= 0 || extraLifePowers <= 0) return;
+    setExtraLifePowers((prev) => { const n = prev - 1; localStorage.setItem("extraLifePowers", n); return n; });
+    usePowerInDB("extraLife");
+    setLives((prev) => prev + 1);
+    setExtraLifeCooldown(true);
+    setMsg("🛡️ Extra Life Added!");
+    setTimeout(() => setMsg("Quest is ready."), 2000);
+  };
+
+  const handleDoubleScore = () => {
+    if (doubleScoreCooldown || lives <= 0 || doubleScorePowers <= 0) return;
+    setDoubleScorePowers((prev) => { const n = prev - 1; localStorage.setItem("doubleScorePowers", n); return n; });
+    usePowerInDB("doubleScore");
+    setIsDoubleScoreActive(true);
+    setDoubleScoreCooldown(true);
+    setMsg("⚡ Double Score Activated! (Next Answer)");
   };
 
   const restart = () => {
     setScore(0);
     setLives(getInitialLives());
     setTimeLeft(getInitialTime());
+    setConsecutiveWins(0);
+    setFeedbackOverlay(null);
+    setTimeBreakCooldown(false);
+    setExtraLifeCooldown(false);
+    setDoubleScoreCooldown(false);
+    setIsTimeBreakActive(false);
+    setIsDoubleScoreActive(false);
     setMsg("Quest is ready.");
     loadQuestion();
   };
@@ -184,30 +359,80 @@ function Game() {
               </svg>
             </div>
             <div className="feedback-info">
-              <span className="feedback-badge">{feedbackOverlay === "correct" ? "EXCELLENT" : "OOPS!"}</span>
-              <h3>{feedbackOverlay === "correct" ? "Very GOOD! 🍌" : "Wrong Answer! 😢"}</h3>
+              <span className="feedback-badge">
+                {feedbackOverlay === "correct" ? "EXCELLENT" :
+                  feedbackOverlay === "timeup" ? "TOO LATE" :
+                    feedbackOverlay === "gameover" ? "GAME OVER" : "OOPS!"}
+              </span>
+              <h3>
+                {feedbackOverlay === "correct" ? "Very GOOD! 🍌" :
+                  feedbackOverlay === "timeup" ? "Too Late! ⏰" :
+                    feedbackOverlay === "gameover" ? "Out of Lives! 💔" : "Wrong Answer! 😢"}
+              </h3>
+              {feedbackOverlay === "gameover" && (
+                <div style={{ marginTop: '15px' }}>
+                  <h2 style={{ color: '#8B4513', margin: '10px 0 15px 0' }}>Final Score: {score}</h2>
+                  <button className="game-btn" onClick={() => window.location.reload()}>
+                    Retry
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
       )}
       <div className="game-wrap">
 
-        <div className="game-board">
-          {imgUrl ? (
-            <img className="banana-img" src={imgUrl} alt="Banana puzzle" />
-          ) : (
-            <p>Loading image...</p>
-          )}
+        <div className="game-content-row">
+          <div className="game-board">
+            {imgUrl ? (
+              <img className="banana-img" src={imgUrl} alt="Banana puzzle" />
+            ) : (
+              <p>Loading image...</p>
+            )}
+          </div>
+
+          <div className="powerups-container">
+            <button
+              className={`powerup-btn time-break-btn ${timeBreakCooldown ? 'used' : ''}`}
+              onClick={handleTimeBreak}
+              disabled={timeBreakCooldown || isTimeBreakActive || lives <= 0 || isEasy || timeBreakPowers <= 0}
+            >
+              <span className="powerup-icon">⏳</span>
+              <span className="powerup-text">{timeBreakCooldown ? "Used" : "Time Break"}</span>
+              <span className="powerup-count">{timeBreakPowers}</span>
+            </button>
+            <button
+              className={`powerup-btn extra-life-btn ${extraLifeCooldown ? 'used' : ''}`}
+              onClick={handleExtraLife}
+              disabled={extraLifeCooldown || lives <= 0 || extraLifePowers <= 0}
+            >
+              <span className="powerup-icon">🛡️</span>
+              <span className="powerup-text">{extraLifeCooldown ? "Used" : "+1 Life"}</span>
+              <span className="powerup-count">{extraLifePowers}</span>
+            </button>
+            <button
+              className={`powerup-btn double-score-btn ${doubleScoreCooldown ? 'used' : ''}`}
+              onClick={handleDoubleScore}
+              disabled={doubleScoreCooldown || lives <= 0 || doubleScorePowers <= 0}
+            >
+              <span className="powerup-icon">⚡</span>
+              <span className="powerup-text">{doubleScoreCooldown ? "Used" : "2x Score"}</span>
+              <span className="powerup-count">{doubleScorePowers}</span>
+            </button>
+          </div>
         </div>
 
         <p className="game-status">{msg}</p>
 
         <div className="game-hud">
-          <span>Score: {score}</span>
-          <span>High Score: {highScore}</span>
-          <span>Lives: {lives}</span>
+          <span className="hud-score">Score: {score}</span>
+          <span className="hud-highscore">High Score: {highScore}</span>
+          <span className="hud-lives">Lives: {lives}</span>
+          <span className="hud-bananas">Bananas: {bananaCount}</span>
+          {consecutiveWins > 0 && <span className="hud-combo">Combo: {consecutiveWins}/3</span>}
           {!isEasy && (
-            <span className={timeLeft <= 10 ? 'timer-warning' : ''}>Time: {timeLeft}s</span>
+            <span className={`hud-time ${timeLeft <= 10 ? 'timer-warning' : ''}`}>Time: {timeLeft}s</span>
           )}
         </div>
 

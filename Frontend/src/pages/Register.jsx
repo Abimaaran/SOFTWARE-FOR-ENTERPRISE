@@ -67,11 +67,19 @@ function Register() {
     setAlert({ show: false, type: '', message: '' });
 
     try {
-      await axios.post("http://localhost:5000/auth/register", {
+      const res = await axios.post("http://localhost:5000/auth/register", {
         username,
         email,
         password
       });
+
+      const { highScoreEasy, highScoreHard, bananaCount, timeBreakPowers, extraLifePowers, doubleScorePowers } = res.data;
+      localStorage.setItem("highScoreEasy", highScoreEasy || 0);
+      localStorage.setItem("highScoreHard", highScoreHard || 0);
+      localStorage.setItem("bananaCount", bananaCount || 20);
+      localStorage.setItem("timeBreakPowers", timeBreakPowers || 1);
+      localStorage.setItem("extraLifePowers", extraLifePowers || 1);
+      localStorage.setItem("doubleScorePowers", doubleScorePowers || 1);
 
       setAlert({
         show: true,

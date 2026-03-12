@@ -27,12 +27,16 @@ router.post("/register", async (req, res) => {
       password: hash,
     });
 
-    res.status(201).json({ 
-      message: "Registered", 
+    res.status(201).json({
+      message: "Registered",
       userId: user._id,
       highScoreEasy: user.highScoreEasy,
       highScoreMedium: user.highScoreMedium,
-      highScoreHard: user.highScoreHard 
+      highScoreHard: user.highScoreHard,
+      bananaCount: user.bananaCount,
+      timeBreakPowers: user.timeBreakPowers,
+      extraLifePowers: user.extraLifePowers,
+      doubleScorePowers: user.doubleScorePowers
     });
   } catch (e) {
     res.status(500).json({ message: e.message });
@@ -64,14 +68,43 @@ router.post("/login", async (req, res) => {
       { expiresIn: "2h" }
     );
 
-    res.json({ 
-      message: "Login success", 
+    res.json({
+      message: "Login success",
       token,
       username: user.username,
       email: user.email,
       highScoreEasy: user.highScoreEasy,
       highScoreMedium: user.highScoreMedium,
-      highScoreHard: user.highScoreHard
+      highScoreHard: user.highScoreHard,
+      bananaCount: user.bananaCount,
+      timeBreakPowers: user.timeBreakPowers,
+      extraLifePowers: user.extraLifePowers,
+      doubleScorePowers: user.doubleScorePowers
+    });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+// GET CURRENT USER DATA (sync localStorage with DB)
+const authMiddleware = require("../middleware/authMiddleware");
+
+router.get("/me", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({
+      username: user.username,
+      email: user.email,
+      bananaCount: user.bananaCount,
+      highScoreEasy: user.highScoreEasy,
+      highScoreMedium: user.highScoreMedium,
+      highScoreHard: user.highScoreHard,
+      timeBreakPowers: user.timeBreakPowers,
+      extraLifePowers: user.extraLifePowers,
+      doubleScorePowers: user.doubleScorePowers
     });
   } catch (e) {
     res.status(500).json({ message: e.message });
@@ -79,7 +112,6 @@ router.post("/login", async (req, res) => {
 });
 
 // UPDATE HIGH SCORE
-const authMiddleware = require("../middleware/authMiddleware");
 
 router.put("/highscore", authMiddleware, async (req, res) => {
   try {
@@ -95,8 +127,8 @@ router.put("/highscore", authMiddleware, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const field = difficulty === "hard" ? "highScoreHard" : 
-                  difficulty === "medium" ? "highScoreMedium" : "highScoreEasy";
+    const field = difficulty === "hard" ? "highScoreHard" :
+      difficulty === "medium" ? "highScoreMedium" : "highScoreEasy";
 
     if (score > user[field]) {
       user[field] = score;
@@ -105,6 +137,106 @@ router.put("/highscore", authMiddleware, async (req, res) => {
     }
 
     res.json({ message: "Score not higher than high score", highScore: user[field] });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+// UPDATE BANANAS
+router.put("/update-bananas", authMiddleware, async (req, res) => {
+  try {
+    const { amount } = req.body;
+    const userId = req.user.userId;
+
+    if (amount === undefined) {
+      return res.status(400).json({ message: "Amount is required" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.bananaCount += amount;
+    await user.save();
+
+    res.json({ message: "Bananas updated", bananaCount: user.bananaCount });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+// USE POWER
+router.put("/use-power", authMiddleware, async (req, res) => {
+  try {
+    const { powerType } = req.body;
+    const userId = req.user.userId;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const fieldMap = {
+      timeBreak: "timeBreakPowers",
+      extraLife: "extraLifePowers",
+      doubleScore: "doubleScorePowers"
+    };
+    const field = fieldMap[powerType];
+    if (!field) return res.status(400).json({ message: "Invalid power type" });
+
+    if (user[field] > 0) {
+      user[field] -= 1;
+      await user.save();
+      return res.json({
+        message: "Power used",
+        timeBreakPowers: user.timeBreakPowers,
+        extraLifePowers: user.extraLifePowers,
+        doubleScorePowers: user.doubleScorePowers
+      });
+    }
+
+    res.status(400).json({ message: "No powers left" });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+// BUY POWER
+router.put("/buy-power", authMiddleware, async (req, res) => {
+  try {
+    const { powerType } = req.body;
+    const userId = req.user.userId;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const costMap = { timeBreak: 10, extraLife: 15, doubleScore: 20 };
+    const fieldMap = {
+      timeBreak: "timeBreakPowers",
+      extraLife: "extraLifePowers",
+      doubleScore: "doubleScorePowers"
+    };
+    const cost = costMap[powerType];
+    const field = fieldMap[powerType];
+    if (!cost || !field) return res.status(400).json({ message: "Invalid power type" });
+
+    if (user.bananaCount >= cost) {
+      user.bananaCount -= cost;
+      user[field] += 1;
+      await user.save();
+      return res.json({
+        message: "Power purchased successfully",
+        bananaCount: user.bananaCount,
+        timeBreakPowers: user.timeBreakPowers,
+        extraLifePowers: user.extraLifePowers,
+        doubleScorePowers: user.doubleScorePowers
+      });
+    }
+
+    res.status(400).json({ message: `Not enough bananas. Need ${cost} 🍌` });
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
@@ -155,13 +287,13 @@ router.put("/update-profile", authMiddleware, async (req, res) => {
 router.get("/leaderboard", authMiddleware, async (req, res) => {
   try {
     const { difficulty } = req.query;
-    const field = difficulty === "hard" ? "highScoreHard" : 
-                  difficulty === "medium" ? "highScoreMedium" : "highScoreEasy";
+    const field = difficulty === "hard" ? "highScoreHard" :
+      difficulty === "medium" ? "highScoreMedium" : "highScoreEasy";
 
     const topPlayers = await User.find({}, `username ${field}`)
       .sort({ [field]: -1 })
       .limit(10);
-    
+
     // Map response to a common "highScore" property for easier frontend display
     const formattedPlayers = topPlayers.map(p => ({
       _id: p._id,
@@ -186,7 +318,7 @@ router.post("/forgot-password", async (req, res) => {
 
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    
+
     // Store in DB (Valid for 15 mins)
     user.resetOTP = otp;
     user.resetOTPExpires = Date.now() + 15 * 60 * 1000;
@@ -205,10 +337,10 @@ router.post("/verify-otp", async (req, res) => {
     const { email, otp } = req.body;
     if (!email || !otp) return res.status(400).json({ message: "Email and OTP required" });
 
-    const user = await User.findOne({ 
-      email, 
-      resetOTP: otp, 
-      resetOTPExpires: { $gt: Date.now() } 
+    const user = await User.findOne({
+      email,
+      resetOTP: otp,
+      resetOTPExpires: { $gt: Date.now() }
     });
 
     if (!user) {
@@ -229,10 +361,10 @@ router.post("/reset-password", async (req, res) => {
       return res.status(400).json({ message: "All fields required" });
     }
 
-    const user = await User.findOne({ 
-      email, 
-      resetOTP: otp, 
-      resetOTPExpires: { $gt: Date.now() } 
+    const user = await User.findOne({
+      email,
+      resetOTP: otp,
+      resetOTPExpires: { $gt: Date.now() }
     });
 
     if (!user) {
@@ -242,7 +374,7 @@ router.post("/reset-password", async (req, res) => {
     // Hash new password
     const hash = await bcrypt.hash(newPassword, 10);
     user.password = hash;
-    
+
     // Clear OTP fields
     user.resetOTP = undefined;
     user.resetOTPExpires = undefined;

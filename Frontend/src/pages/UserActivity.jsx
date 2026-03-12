@@ -6,6 +6,7 @@ function UserActivity() {
   const mediumScore = Number(localStorage.getItem("highScoreMedium")) || 0;
   const hardScore = Number(localStorage.getItem("highScoreHard")) || 0;
   const username = localStorage.getItem("username") || "Player";
+  const bananaCount = Number(localStorage.getItem("bananaCount")) || 0;
 
   const totalScore = easyScore + mediumScore + hardScore;
 
@@ -25,10 +26,10 @@ function UserActivity() {
           <p className="activity-subtitle">Track your performance and achievements 🍌</p>
         </header>
 
-        <section className="stats-grid three-col">
+        <section className="stats-grid four-col">
           <div className="stat-card premium-card easy">
             <div className="card-badge">EASY</div>
-            <span className="stat-icon">🍌</span>
+            <span className="stat-icon">👶</span>
             <div className="stat-info">
               <h3>High Score</h3>
               <div className="stat-value">{easyScore}</div>
@@ -53,6 +54,16 @@ function UserActivity() {
               <h3>High Score</h3>
               <div className="stat-value">{hardScore}</div>
               <p>Pro Peeler Status</p>
+            </div>
+          </div>
+
+          <div className="stat-card premium-card bananas-card">
+            <div className="card-badge">WALLET</div>
+            <span className="stat-icon">🍌</span>
+            <div className="stat-info">
+              <h3>Bananas</h3>
+              <div className="stat-value">{bananaCount}</div>
+              <p>Your Currency</p>
             </div>
           </div>
         </section>
