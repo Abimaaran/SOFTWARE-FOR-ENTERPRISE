@@ -33,21 +33,21 @@ function Leaderboard() {
     <div className="leaderboard-page">
       <div className="leaderboard-wrap">
         <h1 className="leaderboard-title">🏆 Banana Peelers 🏆</h1>
-        
+
         <div className="difficulty-selector">
-          <button 
+          <button
             className={`diff-btn ${difficulty === 'easy' ? 'active' : ''}`}
             onClick={() => setDifficulty('easy')}
           >
-            🍌 Easy
+            👶 Easy
           </button>
-          <button 
+          <button
             className={`diff-btn ${difficulty === 'medium' ? 'active' : ''}`}
             onClick={() => setDifficulty('medium')}
           >
             🐒 Medium
           </button>
-          <button 
+          <button
             className={`diff-btn ${difficulty === 'hard' ? 'active' : ''}`}
             onClick={() => setDifficulty('hard')}
           >

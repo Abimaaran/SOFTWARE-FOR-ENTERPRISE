@@ -121,25 +121,42 @@ body {
   }
 }
 
-/* ===== Puzzle Board - Larger area for image ===== */
+/* ===== Puzzle Board - Adjusted for side-by-side layout ===== */
 .game-board {
   background: linear-gradient(145deg, #FFF9E6, #FFF0C0);
   border: 3px solid #FFD700;
-  padding: 20px;
-  border-radius: 30px;
+  padding: 15px;
+  border-radius: 20px;
   box-shadow:
     inset 0 2px 10px rgba(255, 215, 0, 0.3),
     0 20px 30px -10px rgba(255, 140, 0, 0.3);
-  flex: 3;
-  /* Reduced from 5 to give more space below */
-  max-height: 50vh;
-  /* Adding a max height limit */
+  flex: 1;
+  max-width: 650px; /* Increased maximum width of the board */
+  max-height: 55vh; /* Increased height */
   min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  margin-bottom: 10px;
+  margin: 0 auto; /* Center within the flex area if needed */
+}
+
+/* ===== Game Content Row (Board + Powerups side-by-side) ===== */
+.game-content-row {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch; /* Make children stretch to same height if possible, or center them */
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 850px; /* Increased entire row width for better alignment */
+  margin: 0 auto 10px auto;
+}
+
+@media (max-width: 768px) {
+  .game-content-row {
+    flex-direction: column;
+  }
 }
 
 .game-board:hover {
@@ -215,11 +232,86 @@ body {
   }
 }
 
+/* ===== Power-ups Container ===== */
+.powerups-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  width: 130px; /* Slightly narrower sidebar */
+  flex-shrink: 0;
+}
+
+.powerup-btn {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f2f6 100%);
+  border: 2px solid #dfe4ea;
+  border-radius: 12px;
+  padding: 10px 8px; /* Slightly tighter padding */
+  font-size: 13px;
+  font-weight: 700;
+  color: #2f3542;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  text-align: center;
+}
+
+.powerup-icon {
+  font-size: 22px;
+}
+
+.powerup-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+  border-color: #f6b93b;
+}
+
+.powerup-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.powerup-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}
+
+.time-break-btn {
+  border-bottom: 4px solid #3498db;
+}
+
+.extra-life-btn {
+  border-bottom: 4px solid #e74c3c;
+}
+
+.double-score-btn {
+  border-bottom: 4px solid #f1c40f;
+}
+
+/* Per-power count badge */
+.powerup-count {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #8B4513;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 20px;
+  min-width: 22px;
+  text-align: center;
+}
+
 /* ===== Score & Lives - More Compact ===== */
 .game-hud {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  gap: 15px;
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 6px;
@@ -239,50 +331,74 @@ body {
   position: relative;
 }
 
-.game-hud span:first-child {
+.game-hud span.hud-score {
   color: #2E7D32;
   border: 2px solid #FFD700;
   background: linear-gradient(145deg, #FFFFFF, #FFF9E6);
 }
 
-.game-hud span:first-child::before {
-  content: '⭐';
+.game-hud span.hud-score::before {
+  content: '🎯';
   margin-right: 6px;
   font-size: 18px;
 }
 
-.game-hud span:nth-child(2) {
+.game-hud span.hud-highscore {
   color: #000000;
   border: 2px solid #FFD700;
   background: linear-gradient(145deg, #FFFFFF, #FFF9E6);
 }
 
-.game-hud span:nth-child(2)::before {
-  content: '🏆';
+.game-hud span.hud-highscore::before {
+  content: '👑';
   margin-right: 6px;
   font-size: 18px;
 }
 
-.game-hud span:nth-child(3) {
+.game-hud span.hud-lives {
   color: #C62828;
   border: 2px solid #FFD700;
   background: linear-gradient(145deg, #FFFFFF, #FFF9E6);
 }
 
-.game-hud span:nth-child(3)::before {
+.game-hud span.hud-lives::before {
   content: '❤️';
   margin-right: 6px;
   font-size: 18px;
 }
 
-.game-hud span:nth-child(4) {
+.game-hud span.hud-bananas {
+  color: #8B4513;
+  border: 2px solid #FFD700;
+  background: linear-gradient(145deg, #FFFFFF, #FFF9E6);
+}
+
+.game-hud span.hud-bananas::before {
+  content: '🍌';
+  margin-right: 6px;
+  font-size: 18px;
+}
+
+.game-hud span.hud-combo {
+  color: #D84315;
+  border: 2px solid #FFD700;
+  background: linear-gradient(145deg, #FFFFFF, #FFE0B2);
+}
+
+.game-hud span.hud-combo::before {
+  content: '🔥';
+  margin-right: 6px;
+  font-size: 18px;
+}
+
+.game-hud span.hud-time {
   color: #1976D2;
   border: 2px solid #FFD700;
   background: linear-gradient(145deg, #FFFFFF, #FFF9E6);
 }
 
-.game-hud span:nth-child(4)::before {
-  content: '⏰';
+.game-hud span.hud-time::before {
+  content: '⏳';
   margin-right: 6px;
   font-size: 18px;
 }
@@ -841,6 +957,7 @@ body::before {
   display: flex;
   align-items: center;
   gap: 1.8rem;
+  pointer-events: auto;
   box-shadow:
     0 20px 50px rgba(0, 0, 0, 0.2),
     0 0 0 6px rgba(255, 215, 0, 0.2);
@@ -865,6 +982,22 @@ body::before {
   box-shadow:
     0 20px 50px rgba(231, 76, 60, 0.25),
     0 0 0 6px rgba(231, 76, 60, 0.15);
+}
+
+.feedback-popup-wrap.timeup .feedback-popup-content {
+  border-color: #f39c12;
+  background: linear-gradient(135deg, #ffffff 0%, #fff8e1 100%);
+  box-shadow:
+    0 20px 50px rgba(243, 156, 18, 0.25),
+    0 0 0 6px rgba(243, 156, 18, 0.15);
+}
+
+.feedback-popup-wrap.gameover .feedback-popup-content {
+  border-color: #8B0000;
+  background: linear-gradient(135deg, #ffffff 0%, #ffeeee 100%);
+  box-shadow:
+    0 20px 50px rgba(139, 0, 0, 0.25),
+    0 0 0 6px rgba(139, 0, 0, 0.15);
 }
 
 .monkey-svg-container {

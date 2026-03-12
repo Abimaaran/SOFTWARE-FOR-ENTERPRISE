@@ -20,7 +20,7 @@ function GameSelection() {
 
         <div className="selection-grid">
           <button className="selection-card easy" onClick={() => selectMode("easy")}>
-            <div className="card-icon">🍌</div>
+            <div className="card-icon">👶</div>
             <h2>Easy </h2>
             <p>No timer • 5 Lives</p>
             <span className="play-hint">Beginner</span>
