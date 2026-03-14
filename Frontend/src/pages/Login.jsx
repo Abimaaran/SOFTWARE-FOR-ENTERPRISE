@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
@@ -11,6 +11,14 @@ function Login() {
   const [alert, setAlert] = useState({ show: false, type: '', message: '' });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // If user is already logged in, redirect to game selection
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/selection");
+    }
+  }, [navigate]);
 
   const handleLogin = async () => {
     if (!email || !password) {
