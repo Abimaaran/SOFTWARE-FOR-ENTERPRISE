@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import "./Profile.css";
 
 function Profile() {
@@ -92,13 +93,18 @@ function Profile() {
           </div>
 
           {!showPasswordForm ? (
-            <button 
-              type="button" 
-              className="change-pass-toggle"
-              onClick={() => setShowPasswordForm(true)}
-            >
-              🔒 Change Password
-            </button>
+            <div className="security-actions">
+              <button 
+                type="button" 
+                className="change-pass-toggle"
+                onClick={() => setShowPasswordForm(true)}
+              >
+                🔒 Change Password
+              </button>
+              <Link to="/mfa-setup" className="mfa-setup-link">
+                🛡️ MFA Settings
+              </Link>
+            </div>
           ) : (
             <div className="password-fields-wrap animation-down">
               <div className="input-group">

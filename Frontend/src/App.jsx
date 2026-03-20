@@ -5,6 +5,8 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import VerifyOTP from "./pages/VerifyOTP";
 import ResetPassword from "./pages/ResetPassword";
+import MFAVerify from "./pages/MFAVerify";
+import MFASetup from "./pages/MFASetup";
 import GameSelection from "./pages/GameSelection";
 import Profile from "./pages/Profile";
 import UserActivity from "./pages/UserActivity";
@@ -43,6 +45,15 @@ function App() {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/verify-otp" element={<VerifyOTP />} />
               <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/verify-mfa" element={<MFAVerify />} />
+              <Route
+                path="/mfa-setup"
+                element={
+                  <ProtectedRoute>
+                    <MFASetup />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/selection"
                 element={

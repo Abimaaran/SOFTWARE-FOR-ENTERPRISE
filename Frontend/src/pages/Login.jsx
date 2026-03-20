@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import emailjs from "@emailjs/browser";
 import "./Login.css";
 
 function Login() {
@@ -38,6 +39,33 @@ function Login() {
         email,
         password
       });
+
+      if (res.data.mfaRequired) {
+        const { otp, email, userId } = res.data;
+        
+        // Send OTP via EmailJS
+        const templateParams = {
+          email: email,
+          otp: otp,
+          time: "15 minutes",
+          action_name: "Login Verification",
+          message_text: "to verify your login"
+        };
+
+        try {
+          await emailjs.send(
+            import.meta.env.VITE_EMAILJS_SERVICE_ID,
+            import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+            templateParams,
+            import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+          );
+        } catch (err) {
+          console.error("EmailJS failed:", err);
+        }
+
+        navigate("/verify-mfa", { state: { userId, email } });
+        return;
+      }
 
       const token = res.data.token;
       const { highScoreEasy, highScoreHard } = res.data;
