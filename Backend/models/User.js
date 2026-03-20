@@ -14,6 +14,9 @@ const userSchema = new mongoose.Schema(
     doubleScorePowers: { type: Number, default: 1 },
     resetOTP: { type: String },
     resetOTPExpires: { type: Date },
+    mfaEnabled: { type: Boolean, default: false },
+    mfaOTP: { type: String },
+    mfaOTPExpires: { type: Date },
   },
   { timestamps: true }
 );

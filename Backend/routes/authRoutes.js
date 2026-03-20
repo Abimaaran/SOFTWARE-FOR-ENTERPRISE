@@ -62,6 +62,23 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    // Check if MFA is enabled
+    if (user.mfaEnabled) {
+      // Generate 6-digit OTP
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      user.mfaOTP = otp;
+      user.mfaOTPExpires = Date.now() + 15 * 60 * 1000; // 15 mins
+      await user.save();
+
+      return res.json({
+        message: "MFA required",
+        mfaRequired: true,
+        userId: user._id,
+        email: user.email,
+        otp: otp // Frontend will send this via EmailJS
+      });
+    }
+
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       process.env.JWT_SECRET,
@@ -381,6 +398,113 @@ router.post("/reset-password", async (req, res) => {
     await user.save();
 
     res.json({ message: "Password updated successfully" });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});// MFA SETUP - Generate Email OTP
+router.post("/mfa/setup", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.mfaOTP = otp;
+    user.mfaOTPExpires = Date.now() + 15 * 60 * 1000;
+    await user.save();
+
+    res.json({ message: "OTP generated", otp, email: user.email });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+// MFA VERIFY SETUP - Enable MFA
+router.post("/mfa/verify-setup", authMiddleware, async (req, res) => {
+  try {
+    const { token } = req.body;
+    const user = await User.findById(req.user.userId);
+    
+    if (!user || user.mfaOTP !== token || user.mfaOTPExpires < Date.now()) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    user.mfaEnabled = true;
+    user.mfaOTP = undefined;
+    user.mfaOTPExpires = undefined;
+    await user.save();
+
+    res.json({ message: "MFA enabled successfully" });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+// MFA VERIFY LOGIN - Authenticate via OTP
+router.post("/mfa/verify-login", async (req, res) => {
+  try {
+    const { userId, token } = req.body;
+    if (!userId || !token) {
+      return res.status(400).json({ message: "User ID and Token required" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user || !user.mfaEnabled || user.mfaOTP !== token || user.mfaOTPExpires < Date.now()) {
+      return res.status(401).json({ message: "Invalid or expired OTP" });
+    }
+
+    // Clear OTP
+    user.mfaOTP = undefined;
+    user.mfaOTPExpires = undefined;
+    await user.save();
+
+    const jwtToken = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "2h" }
+    );
+
+    res.json({
+      message: "Login success",
+      token: jwtToken,
+      username: user.username,
+      email: user.email,
+      highScoreEasy: user.highScoreEasy,
+      highScoreMedium: user.highScoreMedium,
+      highScoreHard: user.highScoreHard,
+      bananaCount: user.bananaCount,
+      timeBreakPowers: user.timeBreakPowers,
+      extraLifePowers: user.extraLifePowers,
+      doubleScorePowers: user.doubleScorePowers
+    });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+// MFA DISABLE - Deactivate MFA
+router.post("/mfa/disable", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.mfaEnabled = false;
+    user.mfaOTP = undefined;
+    user.mfaOTPExpires = undefined;
+    await user.save();
+
+    res.json({ message: "MFA disabled successfully" });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+
+// GET MFA STATUS
+router.get('/status', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ mfaEnabled: user.mfaEnabled });
   } catch (e) {
     res.status(500).json({ message: e.message });
   }

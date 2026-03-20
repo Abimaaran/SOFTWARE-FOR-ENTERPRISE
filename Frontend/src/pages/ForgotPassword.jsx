@@ -29,7 +29,9 @@ function ForgotPassword() {
       const templateParams = {
         email: email,
         otp: otp,
-        time: "15 minutes"
+        time: "15 minutes",
+        action_name: "Password Reset",
+        message_text: "to reset your password"
       };
 
       await emailjs.send(

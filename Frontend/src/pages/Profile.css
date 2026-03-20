@@ -109,6 +109,12 @@
   font-weight: 500;
 }
 
+.security-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .change-pass-toggle {
   background: #fff;
   border: 2px dashed #f9d71c;
@@ -123,6 +129,26 @@
 .change-pass-toggle:hover {
   background: #fdf2b1;
   border-style: solid;
+}
+
+.mfa-setup-link {
+  display: block;
+  text-align: center;
+  background: #5c4033;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.mfa-setup-link:hover {
+  background: #8B4513;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .password-fields-wrap {
